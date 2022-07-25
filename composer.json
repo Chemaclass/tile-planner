@@ -3,8 +3,6 @@
     "description": "Tile Planning Tool",
     "type": "library",
     "license": "proprietary",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "require": {
         "php": ">=7.4",
         "ext-ctype": "*",
