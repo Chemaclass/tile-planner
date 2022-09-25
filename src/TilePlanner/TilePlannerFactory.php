@@ -24,8 +24,9 @@ use App\TilePlanner\Models\Rests;
 use App\TilePlanner\Validator\DeviationValidator;
 use App\TilePlanner\Validator\RangeValidator;
 use App\TilePlanner\Validator\RangeValidatorInterface;
+use Gacela\Framework\AbstractFactory;
 
-final class TilePlannerFactory
+final class TilePlannerFactory extends AbstractFactory
 {
     public function createTilePlanCreator(string $layingType): TilePlanCreator
     {
@@ -35,7 +36,7 @@ final class TilePlannerFactory
         );
     }
 
-    public function createRowCreator(string $layingType): RowCreator
+    private function createRowCreator(string $layingType): RowCreator
     {
         $firstTileCalculator = $this->createFirstTileLengthCalculator();
         $lastTileCalculator = $this->createLastTileLengthCalculator();
@@ -53,7 +54,7 @@ final class TilePlannerFactory
         return new Rests();
     }
 
-    public function createTileLengthRangeCalculator(): TileLengthRangeCreatorInterface
+    private function createTileLengthRangeCalculator(): TileLengthRangeCreatorInterface
     {
         return new TileLengthRangeCreator();
     }

@@ -5,23 +5,21 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Form\TilePlannerType;
-use App\TilePlanner\TilePlannerFacadeInterface;
+use App\TilePlanner\TilePlannerFacade;
 use App\TilePlanner\Models\TilePlanInput;
+use Gacela\Framework\DocBlockResolverAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @method TilePlannerFacade getFacade()
+ */
 final class TilePlanCreatorCommand extends Command
 {
+    use DocBlockResolverAwareTrait;
+
     protected static $defaultName = 'app:create-layer-plan';
-    private TilePlannerFacadeInterface $tilePlannerFacade;
-
-    public function __construct(TilePlannerFacadeInterface $tilePlannerFacade)
-    {
-        $this->tilePlannerFacade = $tilePlannerFacade;
-
-        parent::__construct();
-    }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -29,7 +27,7 @@ final class TilePlanCreatorCommand extends Command
         $formData = $formHelper->interactUsingForm(TilePlannerType::class, $input, $output);
         $tileInput = TilePlanInput::fromData($formData);
 
-        $tilePlan = $this->tilePlannerFacade->createPlan($tileInput);
+        $tilePlan = $this->getFacade()->createPlan($tileInput);
 
         print json_encode($tilePlan);
 
