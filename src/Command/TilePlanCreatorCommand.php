@@ -29,7 +29,8 @@ final class TilePlanCreatorCommand extends Command
 
         $tilePlan = $this->getFacade()->createPlan($tileInput);
 
-        print json_encode($tilePlan);
+        $fileContent = json_encode($tilePlan, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+        $output->writeln($fileContent);
 
         return self::SUCCESS;
     }
