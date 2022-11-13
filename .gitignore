@@ -19,6 +19,7 @@ yarn-error.log
 
 .idea/
 .DS_Store
+.gacela/
 reports/
 pcov/
 .phpcs-cache
@@ -27,3 +28,4 @@ pcov/
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
