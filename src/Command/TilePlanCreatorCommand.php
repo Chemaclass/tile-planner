@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace TilePlanner\Command;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\TilePlannerFacade;
-use App\TilePlanner\Models\TilePlanInput;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\TilePlannerFacade;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Gacela\Framework\DocBlockResolverAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

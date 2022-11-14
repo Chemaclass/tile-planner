@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Creator;
+namespace TilePlannerTests\Unit\TilePlanner\Creator;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\Creator\TileLengthRangeCreator;
-use App\TilePlanner\Models\TilePlanInput;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 use PHPUnit\Framework\TestCase;
 
 final class TileLengthRangeCreatorTest extends TestCase

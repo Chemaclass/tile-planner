@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Creator\FirstTileCreator;
+namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
-use App\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use App\TilePlanner\TilePlannerConstants;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Models\Tile;
-use App\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\TilePlannerConstants;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
 
 final class MinimumTileCreator implements FirstTileCreatorInterface
 {

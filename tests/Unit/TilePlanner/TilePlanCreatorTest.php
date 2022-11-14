@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner;
+namespace TilePlannerTests\Unit\TilePlanner;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\Creator\RowCreatorInterface;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Models\Row;
-use App\TilePlanner\Models\Tile;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\TilePlanCreator;
-use App\TilePlanner\TilePlannerConstants;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Creator\RowCreatorInterface;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Row;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlanCreator;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 use PHPUnit\Framework\TestCase;
 
 final class TilePlanCreatorTest extends TestCase

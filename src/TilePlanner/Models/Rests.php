@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Models;
+namespace TilePlanner\TilePlanner\Models;
 
-use App\TilePlanner\TilePlannerConstants;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class Rests
 {

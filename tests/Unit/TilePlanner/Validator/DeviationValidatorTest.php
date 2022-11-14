@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Validator;
+namespace TilePlannerTests\Unit\TilePlanner\Validator;
 
-use App\TilePlanner\Validator\DeviationValidator;
+use TilePlanner\TilePlanner\Validator\DeviationValidator;
 use PHPUnit\Framework\TestCase;
 
 final class DeviationValidatorTest extends TestCase

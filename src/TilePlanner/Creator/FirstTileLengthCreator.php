@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Creator;
+namespace TilePlanner\TilePlanner\Creator;
 
-use App\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\LengthRangeBag;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\LengthRangeBag;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Tile;
 
 final class FirstTileLengthCreator implements FirstTileLengthCreatorInterface
 {

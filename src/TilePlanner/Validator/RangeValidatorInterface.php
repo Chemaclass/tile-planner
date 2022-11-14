@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Validator;
+namespace TilePlanner\TilePlanner\Validator;
 
 interface RangeValidatorInterface
 {

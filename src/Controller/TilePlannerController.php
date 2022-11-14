@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace TilePlanner\Controller;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\TilePlannerFacadeInterface;
-use App\TilePlanner\TilePlannerFactory;
-use App\TilePlanner\Models\TilePlanInput;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\TilePlannerFacadeInterface;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Assert\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

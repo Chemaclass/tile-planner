@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Creator;
+namespace TilePlannerTests\Unit\TilePlanner\Creator;
 
-use App\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
-use App\TilePlanner\Creator\FirstTileLengthCreator;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
+use TilePlanner\TilePlanner\Creator\FirstTileLengthCreator;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Tile;
 use PHPUnit\Framework\TestCase;
 
 final class FirstTileLengthCreatorTest extends TestCase

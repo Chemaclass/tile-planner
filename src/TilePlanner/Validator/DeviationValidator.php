@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Validator;
+namespace TilePlanner\TilePlanner\Validator;
 
 final class DeviationValidator implements DeviationValidatorInterface
 {

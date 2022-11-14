@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Models;
+namespace TilePlanner\TilePlanner\Models;
 
 use Assert\Assertion;
 

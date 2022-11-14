@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Models;
+namespace TilePlannerTests\Unit\TilePlanner\Models;
 
-use App\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\Tile;
 use PHPUnit\Framework\TestCase;
 
 final class TileTest extends TestCase

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Validator;
+namespace TilePlannerTests\Unit\TilePlanner\Validator;
 
-use App\TilePlanner\Models\LengthRange;
-use App\TilePlanner\Validator\RangeValidator;
+use TilePlanner\TilePlanner\Models\LengthRange;
+use TilePlanner\TilePlanner\Validator\RangeValidator;
 use PHPUnit\Framework\TestCase;
 
 final class RangeValidatorTest extends TestCase
