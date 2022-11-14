@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace TilePlannerTests\Unit;
 
-use App\TilePlanner;
-use App\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner;
 use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 
 final class TilePlannerTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Creator\LastTileCreator;
+namespace TilePlannerTests\Unit\TilePlanner\Creator\LastTileCreator;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
-use App\TilePlanner\TilePlannerConstants;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\Rests;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
+use TilePlanner\TilePlanner\TilePlannerConstants;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\Rests;
 use PHPUnit\Framework\TestCase;
 
 final class LastTileFittingCreatorTest extends TestCase

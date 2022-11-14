@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner;
+namespace TilePlanner\TilePlanner;
 
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Gacela\Framework\AbstractFacade;
 
 /**

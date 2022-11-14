@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Creator\FirstTileCreator;
+namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
-use App\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\LengthRange;
-use App\TilePlanner\Models\LengthRangeBag;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Validator\DeviationValidatorInterface;
-use App\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\LengthRange;
+use TilePlanner\TilePlanner\Models\LengthRangeBag;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 use PHPUnit\Framework\TestCase;
 
 final class MaximumTileCreatorTest extends TestCase

@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner;
+namespace TilePlanner\TilePlanner;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\Creator\FirstTileCreator\ChessTileCreator;
-use App\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
-use App\TilePlanner\Creator\FirstTileCreator\FullTileCreator;
-use App\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
-use App\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
-use App\TilePlanner\Creator\FirstTileCreator\TileFromRestCreator;
-use App\TilePlanner\Creator\FirstTileLengthCreator;
-use App\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
-use App\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
-use App\TilePlanner\Creator\LastTileCreator\LastTileFromRestCreator;
-use App\TilePlanner\Creator\LastTileCreator\LastTileFromRestForChessTypeCreator;
-use App\TilePlanner\Creator\LastTileLengthCreator;
-use App\TilePlanner\Creator\TileLengthRangeCreator;
-use App\TilePlanner\Creator\RowCreator;
-use App\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Validator\DeviationValidator;
-use App\TilePlanner\Validator\RangeValidator;
-use App\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\ChessTileCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\FullTileCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromRestCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileLengthCreator;
+use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
+use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
+use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestCreator;
+use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestForChessTypeCreator;
+use TilePlanner\TilePlanner\Creator\LastTileLengthCreator;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
+use TilePlanner\TilePlanner\Creator\RowCreator;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Validator\DeviationValidator;
+use TilePlanner\TilePlanner\Validator\RangeValidator;
+use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 use Gacela\Framework\AbstractFactory;
 
 final class TilePlannerFactory extends AbstractFactory

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace TilePlanner;
 
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\TilePlannerFactory;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlannerFactory;
 
 final class TilePlanner
 {

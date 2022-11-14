@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\TilePlanner\Creator\FirstTileCreator;
+namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 
-use App\Form\TilePlannerType;
-use App\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
-use App\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\LengthRange;
-use App\TilePlanner\Models\LengthRangeBag;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Models\Row;
-use App\TilePlanner\Models\Tile;
-use App\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\LengthRange;
+use TilePlanner\TilePlanner\Models\LengthRangeBag;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Row;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
 use PHPUnit\Framework\TestCase;
 
 final class MinimumTileCreatorTest extends TestCase

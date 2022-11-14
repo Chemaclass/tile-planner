@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner\Validator;
+namespace TilePlanner\TilePlanner\Validator;
 
-use App\TilePlanner\Models\LengthRange;
+use TilePlanner\TilePlanner\Models\LengthRange;
 
 final class RangeValidator implements RangeValidatorInterface
 {

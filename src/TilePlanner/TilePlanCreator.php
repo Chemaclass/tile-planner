@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\TilePlanner;
+namespace TilePlanner\TilePlanner;
 
-use App\TilePlanner\Creator\RowCreatorInterface;
-use App\TilePlanner\Models\TilePlan;
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\Rests;
-use App\TilePlanner\Models\Row;
-use App\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Creator\RowCreatorInterface;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Row;
+use TilePlanner\TilePlanner\Models\Tile;
 
 final class TilePlanCreator
 {

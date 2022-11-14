@@ -1,9 +1,9 @@
 <?php
 
-namespace App\TilePlanner\Creator;
+namespace TilePlanner\TilePlanner\Creator;
 
-use App\TilePlanner\Models\TilePlanInput;
-use App\TilePlanner\Models\LengthRangeBag;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\LengthRangeBag;
 
 interface TileLengthRangeCreatorInterface
 {

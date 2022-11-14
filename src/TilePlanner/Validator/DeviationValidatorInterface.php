@@ -1,6 +1,6 @@
 <?php
 
-namespace App\TilePlanner\Validator;
+namespace TilePlanner\TilePlanner\Validator;
 
 interface DeviationValidatorInterface
 {
