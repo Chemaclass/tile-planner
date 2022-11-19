@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace TilePlanner\Command;
 
 use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\TilePlannerFacade;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Gacela\Framework\DocBlockResolverAwareTrait;
@@ -25,7 +28,19 @@ final class TilePlanCreatorCommand extends Command
     {
         $formHelper = $this->getHelper('form');
         $formData = $formHelper->interactUsingForm(TilePlannerType::class, $input, $output);
-        $tileInput = TilePlanInput::fromData($formData);
+        $tileInput = new TilePlanInput(
+            Room::create(
+                $this->castToFloat($formData['room_width']),
+                $this->castToFloat($formData['room_depth']),
+            ),
+            Tile::create(
+                $this->castToFloat($formData['tile_width']),
+                $this->castToFloat($formData['tile_length']),
+            ),
+            new LayingOptions(
+                $this->castToFloat($formData['min_tile_length'])
+            )
+        );
 
         $tilePlan = $this->getFacade()->createPlan($tileInput);
 
@@ -33,5 +48,14 @@ final class TilePlanCreatorCommand extends Command
         $output->writeln($fileContent);
 
         return self::SUCCESS;
+    }
+
+    private function castToFloat(?string $string): ?float
+    {
+        if ($string === null) {
+            return null;
+        }
+
+        return (float) str_replace(',', '.', $string);
     }
 }

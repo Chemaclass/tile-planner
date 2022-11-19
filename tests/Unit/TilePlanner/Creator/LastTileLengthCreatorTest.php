@@ -9,6 +9,8 @@ use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
 use TilePlanner\TilePlanner\Creator\FirstTileLengthCreator;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
 use TilePlanner\TilePlanner\Creator\LastTileLengthCreator;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
@@ -17,26 +19,25 @@ use PHPUnit\Framework\TestCase;
 
 final class LastTileLengthCreatorTest extends TestCase
 {
+    private TilePlanInput $tileInput;
+
+    public function setUp(): void
+    {
+        $this->tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 59),
+            new LayingOptions(20)
+        );
+    }
+
     public function test_use_input_tile_length_if_no_creator_was_passed(): void
     {
         $creator = new LastTileLengthCreator([]);
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '59',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
         $plan = new TilePlan();
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests, 100);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests, 100);
 
         self::assertEquals(59, $actualTile->getLength());
     }
@@ -54,22 +55,10 @@ final class LastTileLengthCreatorTest extends TestCase
             ]
         );
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '59',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
         $plan = new TilePlan();
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests, 100);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests, 100);
 
         self::assertEquals(65, $actualTile->getLength());
     }

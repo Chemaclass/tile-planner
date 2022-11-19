@@ -40,7 +40,6 @@ final class RowCreator implements RowCreatorInterface
                 $rest
             );
 
-            $tile->setLengthPercent($tileInput->getRoomWidth());
             $row->addTile($tile);
 
             $this->usedRowLength += $tile->getLength();
@@ -90,12 +89,11 @@ final class RowCreator implements RowCreatorInterface
         return $restOfRow < $tileInput->getTileLength();
     }
 
-    private function createTile(float $width, float $length, ?int $number = null): Tile
+    private function createTile(float $width, float $length): Tile
     {
         return Tile::create(
             $width,
             $length,
-            $number
         );
     }
 }

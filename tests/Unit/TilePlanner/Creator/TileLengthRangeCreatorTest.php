@@ -6,6 +6,9 @@ namespace TilePlannerTests\Unit\TilePlanner\Creator;
 
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use PHPUnit\Framework\TestCase;
 
@@ -16,18 +19,12 @@ final class TileLengthRangeCreatorTest extends TestCase
         $calculator = new TileLengthRangeCreator();
         $calculator::$rangeBag = null;
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
+        $tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 50),
+            new LayingOptions(20)
         );
+
         $actualRanges = $calculator->calculateRanges($tileInput);
 
         $this->assertCount(2, $actualRanges->getRanges());
@@ -40,18 +37,12 @@ final class TileLengthRangeCreatorTest extends TestCase
         $calculator = new TileLengthRangeCreator();
         $calculator::$rangeBag = null;
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '30',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
+        $tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 50),
+            new LayingOptions(30)
         );
+
         $actualRanges = $calculator->calculateRanges($tileInput);
 
         $this->assertCount(1, $actualRanges->getRanges());
