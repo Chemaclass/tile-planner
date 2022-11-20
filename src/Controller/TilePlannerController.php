@@ -3,6 +3,10 @@
 namespace TilePlanner\Controller;
 
 use TilePlanner\Form\TilePlannerType;
+use TilePlanner\Shared\StringToFloatConverter;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\TilePlannerFacadeInterface;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Assert\InvalidArgumentException;
@@ -13,12 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TilePlannerController extends AbstractController
 {
-    private TilePlannerFacadeInterface $tilePlannerFacade;
-
-    public function __construct(TilePlannerFacadeInterface $tilePlannerFacade)
-    {
-        $this->tilePlannerFacade = $tilePlannerFacade;
-    }
+    public function __construct(
+        private TilePlannerFacadeInterface $tilePlannerFacade,
+        private StringToFloatConverter $stringToFloatConverter,
+    ) {}
 
     #[Route('/', name: 'index')]
     public function index(Request $request): Response
@@ -28,7 +30,20 @@ class TilePlannerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $tileInput = TilePlanInput::fromData($form->getData());
+                $formData = $form->getData();
+                $tileInput = new TilePlanInput(
+                    Room::create(
+                        $this->stringToFloatConverter->toFloat($formData['room_width']),
+                        $this->stringToFloatConverter->toFloat($formData['room_depth']),
+                    ),
+                    Tile::create(
+                        $this->stringToFloatConverter->toFloat($formData['tile_width']),
+                        $this->stringToFloatConverter->toFloat($formData['tile_length']),
+                    ),
+                    new LayingOptions(
+                        $this->stringToFloatConverter->toFloat($formData['min_tile_length'])
+                    )
+                );
             } catch (InvalidArgumentException $exception) {
                 return $this->render(
                     'index.twig',

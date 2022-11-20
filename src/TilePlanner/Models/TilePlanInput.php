@@ -10,8 +10,7 @@ final class TilePlanInput
         private Room $room,
         private Tile $tile,
         private LayingOptions $layingOptions,
-    ) {
-    }
+    ) {}
 
     public function getRoomWidth(): float
     {

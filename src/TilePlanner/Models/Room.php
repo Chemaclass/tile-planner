@@ -16,8 +16,7 @@ final class Room
     private function __construct(
         private float $width,
         private float $depth
-    )
-    {}
+    ) {}
 
     public function getWidth(): float
     {

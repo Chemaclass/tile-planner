@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\Command;
 
 use TilePlanner\Form\TilePlannerType;
+use TilePlanner\Shared\StringToFloatConverter;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -22,6 +23,12 @@ final class TilePlanCreatorCommand extends Command
 {
     use DocBlockResolverAwareTrait;
 
+    public function __construct(
+        private StringToFloatConverter $stringToFloatConverter
+    ) {
+        parent::__construct();
+    }
+
     protected static $defaultName = 'app:create-layer-plan';
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -30,15 +37,15 @@ final class TilePlanCreatorCommand extends Command
         $formData = $formHelper->interactUsingForm(TilePlannerType::class, $input, $output);
         $tileInput = new TilePlanInput(
             Room::create(
-                $this->castToFloat($formData['room_width']),
-                $this->castToFloat($formData['room_depth']),
+                $this->stringToFloatConverter->toFloat($formData['room_width']),
+                $this->stringToFloatConverter->toFloat($formData['room_depth']),
             ),
             Tile::create(
-                $this->castToFloat($formData['tile_width']),
-                $this->castToFloat($formData['tile_length']),
+                $this->stringToFloatConverter->toFloat($formData['tile_width']),
+                $this->stringToFloatConverter->toFloat($formData['tile_length']),
             ),
             new LayingOptions(
-                $this->castToFloat($formData['min_tile_length'])
+                $this->stringToFloatConverter->toFloat($formData['min_tile_length'])
             )
         );
 
@@ -48,14 +55,5 @@ final class TilePlanCreatorCommand extends Command
         $output->writeln($fileContent);
 
         return self::SUCCESS;
-    }
-
-    private function castToFloat(?string $string): ?float
-    {
-        if ($string === null) {
-            return null;
-        }
-
-        return (float) str_replace(',', '.', $string);
     }
 }
