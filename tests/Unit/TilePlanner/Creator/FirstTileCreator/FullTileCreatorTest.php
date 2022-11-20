@@ -4,19 +4,32 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\Form\TilePlannerType;
+use PHPUnit\Framework\TestCase;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FullTileCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
-use PHPUnit\Framework\TestCase;
 
 final class FullTileCreatorTest extends TestCase
 {
+    private TilePlanInput $tileInput;
+
+    public function setUp(): void
+    {
+        $this->tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 50),
+            new LayingOptions(0)
+        );
+    }
+
     public function test_create_returns_tile_with_full_length(): void
     {
         $rangeValidator = $this->createMock(RangeValidatorInterface::class);
@@ -30,22 +43,10 @@ final class FullTileCreatorTest extends TestCase
 
         $creator = new FullTileCreator($rangeValidator, $deviationValidator, $rangeCreator);
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
         $plan = new TilePlan();
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertEquals(50, $actualTile->getLength());
     }
@@ -62,22 +63,10 @@ final class FullTileCreatorTest extends TestCase
 
         $creator = new FullTileCreator($rangeValidator, $deviationValidator, $rangeCreator);
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
         $plan = new TilePlan();
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertNull($actualTile);
     }
@@ -94,22 +83,10 @@ final class FullTileCreatorTest extends TestCase
 
         $creator = new FullTileCreator($rangeValidator, $deviationValidator, $rangeCreator);
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
         $plan = new TilePlan();
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertNull($actualTile);
     }

@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\Form\TilePlannerType;
+use PHPUnit\Framework\TestCase;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
-use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
-use PHPUnit\Framework\TestCase;
 
 final class MaximumTileCreatorTest extends TestCase
 {
@@ -22,17 +23,10 @@ final class MaximumTileCreatorTest extends TestCase
 
     public function setUp(): void
     {
-        $this->tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
+        $this->tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 50),
+            new LayingOptions(0)
         );
     }
 

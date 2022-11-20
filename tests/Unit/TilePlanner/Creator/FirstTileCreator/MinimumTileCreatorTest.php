@@ -7,6 +7,8 @@ namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\LengthRange;
@@ -19,6 +21,17 @@ use PHPUnit\Framework\TestCase;
 
 final class MinimumTileCreatorTest extends TestCase
 {
+    private TilePlanInput $tileInput;
+
+    public function setUp(): void
+    {
+        $this->tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 50),
+            new LayingOptions(0)
+        );
+    }
+
     public function test_create_return_null_when_deviation_is_false(): void
     {
         $rangeCalculator = $this->createMock(TileLengthRangeCreatorInterface::class);
@@ -32,19 +45,6 @@ final class MinimumTileCreatorTest extends TestCase
 
         $creator = new MinimumTileCreator($rangeCalculator, $deviationValidator);
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '20',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
-
         $plan = (new TilePlan())
             ->setRows(
                 [
@@ -53,7 +53,7 @@ final class MinimumTileCreatorTest extends TestCase
             );
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertNull($actualTile);
     }
@@ -70,19 +70,6 @@ final class MinimumTileCreatorTest extends TestCase
 
         $creator = new MinimumTileCreator($rangeCalculator, $deviationValidator);
 
-        $tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '30',
-            'min_tile_length' => '10',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
-        );
-
         $plan = (new TilePlan())
             ->setRows(
                 [
@@ -91,7 +78,7 @@ final class MinimumTileCreatorTest extends TestCase
             );
         $rests = new Rests();
 
-        $actualTile = $creator->create($tileInput, $plan, $rests);
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertEquals(10, $actualTile->getLength());
     }

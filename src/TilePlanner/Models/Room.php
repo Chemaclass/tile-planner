@@ -6,20 +6,17 @@ namespace TilePlanner\TilePlanner\Models;
 
 final class Room
 {
-    private const ROUND = 2;
-    private float $width;
-    private float $depth;
+    private const ROUND_PRECISION = 2;
 
-    public static function create(array $formData): self
+    public static function create(float $width, float $depth): self
     {
-        return new self($formData);
+        return new self($width, $depth);
     }
 
-    private function __construct(array $formData)
-    {
-        $this->width = $formData['room_width'];
-        $this->depth = $formData['room_depth'];
-    }
+    private function __construct(
+        private float $width,
+        private float $depth
+    ) {}
 
     public function getWidth(): float
     {
@@ -33,6 +30,6 @@ final class Room
 
     public function getSize(): float
     {
-        return round($this->depth * $this->width, self::ROUND);
+        return round($this->depth * $this->width, self::ROUND_PRECISION);
     }
 }

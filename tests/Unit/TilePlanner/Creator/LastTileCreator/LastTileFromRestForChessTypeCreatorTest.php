@@ -6,6 +6,9 @@ namespace TilePlannerTests\Unit\TilePlanner\Creator\LastTileCreator;
 
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestForChessTypeCreator;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -19,17 +22,10 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
 
     public function setUp(): void
     {
-        $this->tileInput = TilePlanInput::fromData(
-            [
-            'room_width' => '200',
-            'room_depth' => '100',
-            'tile_width' => '20',
-            'tile_length' => '50',
-            'min_tile_length' => '10',
-            'gap_width' => '0',
-            'laying_type' => TilePlannerType::TYPE_OFFSET,
-            'costs_per_square' => '0',
-            ]
+        $this->tileInput = new TilePlanInput(
+            Room::create(200, 100),
+            Tile::create(20, 50),
+            new LayingOptions(0)
         );
     }
 

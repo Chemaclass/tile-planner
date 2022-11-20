@@ -6,6 +6,8 @@ namespace TilePlannerTests\Unit\TilePlanner\Creator;
 
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
 use TilePlanner\TilePlanner\Creator\FirstTileLengthCreator;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
@@ -16,20 +18,17 @@ final class FirstTileLengthCreatorTest extends TestCase
 {
     private TilePlanInput $tileInput;
 
-    private const PLAN_INPUT_DATA = [
-        'room_width' => '400',
-        'room_depth' => '300',
-        'tile_width' => '20',
-        'tile_length' => '100',
-        'min_tile_length' => '30',
-        'gap_width' => '5',
-        'laying_type' => 'offset',
-        'costs_per_square' => '20',
-    ];
-
     public function setUp(): void
     {
-        $this->tileInput = TilePlanInput::fromData(self::PLAN_INPUT_DATA);
+        $this->tileInput = new TilePlanInput(
+            Room::create(400, 300),
+            Tile::create(20, 100),
+            new LayingOptions(
+                minTileLength: 30,
+                costsPerSquare: 20,
+                gapWidth: 5
+            )
+        );
     }
 
     public function test_calculate_uses_defaults_without_any_calculator(): void
@@ -41,8 +40,8 @@ final class FirstTileLengthCreatorTest extends TestCase
 
         $actualTile = $calculator->create($this->tileInput, $plan, $rests);
 
-        self::assertEquals(self::PLAN_INPUT_DATA['tile_length'], $actualTile->getLength());
-        self::assertEquals(self::PLAN_INPUT_DATA['tile_width'], $actualTile->getWidth());
+        self::assertEquals(100, $actualTile->getLength());
+        self::assertEquals(20, $actualTile->getWidth());
     }
 
     public function test_calculate_uses_returned_tile_from_calculator(): void
@@ -81,7 +80,7 @@ final class FirstTileLengthCreatorTest extends TestCase
 
         $actualTile = $calculator->create($this->tileInput, $plan, $rests);
 
-        self::assertEquals(self::PLAN_INPUT_DATA['tile_length'], $actualTile->getLength());
-        self::assertEquals(self::PLAN_INPUT_DATA['tile_width'], $actualTile->getWidth());
+        self::assertEquals(100, $actualTile->getLength());
+        self::assertEquals(20, $actualTile->getWidth());
     }
 }
