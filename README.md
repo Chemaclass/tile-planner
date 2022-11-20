@@ -25,12 +25,45 @@ composer require sebastianlarisch/tile-planner
 
 2. Create a plan
 ```
-$inputData = (new TilePlanInput())
-      ->setRoomWidth(300)
-      ->setRoomDepth(230)
-      ->setTileLength(110)
-      ->setTileWidth(20)
-      ->setMinTileLength(30);
+$tileInput = new TilePlanInput(
+            Room::create(
+                width: <float>,
+                length: <float>
+            ),
+            Tile::create(
+                width: <float>,
+                length: <float>
+            ),
+            new LayingOptions(
+                minTileLength: <float>
+            )
+        );
 
 $plan = TilePlanner::createPlan($inputData);
+```
+
+You will get a plan as JSON object in return which looks like this:
+```
+{
+    "rows": [
+        {
+            "tiles": [
+                {
+                    "width": <float>,
+                    "length": <float>,
+                    "number": <int>
+                },
+                ...
+            ]
+        },
+        ...  
+    ],
+    "rests": [],
+    "trash": [],
+    "totalRest": <int>,
+    "totalTiles": <int>,
+    "totalArea": <int>,
+    "totalPrice": <float>,
+    "roomWidth": <float>,
+    "roomDepth": <float>
 ```
