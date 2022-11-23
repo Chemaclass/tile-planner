@@ -28,6 +28,6 @@ final class TilePlannerTest extends TestCase
         self::assertEquals('69000', $plan->getTotalArea());
         self::assertEquals('230', $plan->getRoomDepth());
         self::assertEquals('300', $plan->getRoomWidth());
-        self::assertCount(11, $plan->getRows());
+        self::assertCount(12, $plan->getRows());
     }
 }
