@@ -69,7 +69,7 @@ final class Rests
         return self::$trash;
     }
 
-    public function getSumOfAll(): float
+    public function sumOfAll(): float
     {
         return array_sum($this->getRests(TilePlannerConstants::RESTS_LEFT)) + array_sum($this->getRests(TilePlannerConstants::RESTS_RIGHT)) + array_sum($this->getTrash());
     }
