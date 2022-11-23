@@ -24,7 +24,6 @@ final class TilePlanCreator
 
     public function create(TilePlanInput $tileInput): TilePlan
     {
-        // TODO validate input
         $plan = new TilePlan();
         $totalRows = $this->getTotalRows($tileInput);
 
@@ -36,7 +35,7 @@ final class TilePlanCreator
             );
 
             $plan->addRow($row);
-            $plan->setTotalTiles($this->getHighestTileNumberFromRow($row));
+            $plan->setTotalTiles($this->retrieveHighestTileNumberFromRow($row));
         }
 
         $plan->setTotalArea($tileInput->getRoomWidthWithGaps() * $tileInput->getRoomDepthWithGaps());
@@ -50,14 +49,14 @@ final class TilePlanCreator
                 $this->rests->getRests(TilePlannerConstants::RESTS_RIGHT)
             )
         );
-        $plan->setTotalRest($this->rests->getSumOfAll());
+        $plan->setTotalRest($this->rests->sumOfAll());
 
         return $plan;
     }
 
     private function getTotalRows(TilePlanInput $input): int
     {
-        return (int)floor(($input->getRoomDepth() / $input->getTileWidth()));
+        return (int)ceil(($input->getRoomDepth() / $input->getTileWidth()));
     }
 
     private function mergeTiles(array $tiles): array
@@ -75,7 +74,7 @@ final class TilePlanCreator
         return $mergedTrash;
     }
 
-    private function getHighestTileNumberFromRow(Row $row): int
+    private function retrieveHighestTileNumberFromRow(Row $row): int
     {
         $numbers = array_map(fn(Tile $tile) => $tile->getNumber(), $row->getTiles());
 

@@ -37,16 +37,16 @@ final class TilePlanCreatorTest extends TestCase
         $creator = new TilePlanCreator($rowCreator, $rests);
 
         $tileInput = new TilePlanInput(
-            Room::create(100, 25),
+            Room::create(100, 90),
             Tile::create(25, 50),
             new LayingOptions(minTileLength: 20, costsPerSquare: 2)
         );
 
         $plan = $creator->create($tileInput);
 
-        self::assertCount(1, $plan->getRows());
-        self::assertEquals(2500, $plan->getTotalArea());
-        self::assertEquals(0.25, $plan->getTotalAreaInSquareMeter());
-        self::assertEquals(0.5, $plan->getTotalPrice());
+        self::assertCount(4, $plan->getRows());
+        self::assertEquals(9000, $plan->getTotalArea());
+        self::assertEquals(0.9, $plan->getTotalAreaInSquareMeter());
+        self::assertEquals(1.8, $plan->getTotalPrice());
     }
 }
