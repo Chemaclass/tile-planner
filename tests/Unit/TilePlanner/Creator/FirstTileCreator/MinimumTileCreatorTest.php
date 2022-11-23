@@ -45,12 +45,8 @@ final class MinimumTileCreatorTest extends TestCase
 
         $creator = new MinimumTileCreator($rangeCalculator, $deviationValidator);
 
-        $plan = (new TilePlan())
-            ->setRows(
-                [
-                (new Row())->addTile(Tile::create(20, 30))
-                ]
-            );
+        $plan = new TilePlan();
+        $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
         $rests = new Rests();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
@@ -70,12 +66,8 @@ final class MinimumTileCreatorTest extends TestCase
 
         $creator = new MinimumTileCreator($rangeCalculator, $deviationValidator);
 
-        $plan = (new TilePlan())
-            ->setRows(
-                [
-                (new Row())->addTile(Tile::create(20, 30))
-                ]
-            );
+        $plan = new TilePlan();
+        $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
         $rests = new Rests();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);

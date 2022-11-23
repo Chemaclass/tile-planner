@@ -26,8 +26,8 @@ final class RowCreator implements RowCreatorInterface
 
     public function createRow(
         TilePlanInput $tileInput,
-        TilePlan      $plan,
-        Rests         $rest
+        TilePlan $plan,
+        Rests $rest
     ): Row {
         $row = new Row();
         $tileCounter = 1;
@@ -46,7 +46,14 @@ final class RowCreator implements RowCreatorInterface
             $tileCounter++;
         }
 
-        $row->setWidthPercent($tileInput->getRoomDepth(), $tileInput->getTileWidth());
+        $rowWidth = $this->getRowWidth(
+            $tileInput->getRoomDepth(),
+            $tileInput->getTileWidth(),
+            $plan->getRowsCount()
+        );
+
+        $row->setWidth($rowWidth);
+
         $this->usedRowLength = 0;
 
         return $row;
@@ -95,5 +102,16 @@ final class RowCreator implements RowCreatorInterface
             $width,
             $length,
         );
+    }
+
+    private function getRowWidth(float $roomDepth, float $tileWidth, int $totalRows): float
+    {
+        $currentTiledRoomDepth = $totalRows * $tileWidth;
+
+        if ($currentTiledRoomDepth + $tileWidth > $roomDepth) {
+            return $roomDepth - $currentTiledRoomDepth;
+        }
+
+        return $tileWidth;
     }
 }

@@ -31,13 +31,6 @@ final class TilePlan implements JsonSerializable
         return $this->rows;
     }
 
-    public function setRows(array $rows): self
-    {
-        $this->rows = $rows;
-
-        return $this;
-    }
-
     public function addRow(Row $row): void
     {
         $this->rows[] = $row;
@@ -182,5 +175,10 @@ final class TilePlan implements JsonSerializable
     public function jsonSerialize(): object
     {
         return (object)get_object_vars($this);
+    }
+
+    public function getRowsCount(): int
+    {
+        return count($this->rows);
     }
 }

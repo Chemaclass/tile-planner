@@ -10,7 +10,7 @@ final class Row implements JsonSerializable
 {
     private array $tiles = [];
 
-    private float $widthPercent;
+    private float $width;
 
     public function addTile(Tile $tile): self
     {
@@ -24,14 +24,14 @@ final class Row implements JsonSerializable
         return $this->tiles;
     }
 
-    public function setWidthPercent(float $roomDepth, float $tileWidth): void
+    public function setWidth(float $width): void
     {
-        $this->widthPercent = round(100 / ($roomDepth / $tileWidth), 2);
+        $this->width = $width;
     }
 
-    public function getWidthPercent(): float
+    public function getWidth(): float
     {
-        return $this->widthPercent;
+        return $this->width;
     }
 
     public function jsonSerialize(): object
