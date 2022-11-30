@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -34,10 +35,18 @@ final class ChessTileCreator implements FirstTileCreatorInterface
         $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
 
         if ($this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())) {
-            return Tile::create($tileInput->getTileWidth(), $tileLength);
+            return Tile::create(
+                $tileInput->getTileWidth(),
+                $tileLength,
+                TileCounter::next()
+            );
         }
 
-        $tile = Tile::create($tileInput->getTileWidth(), $tileRanges->getMinOfFirstRange());
+        $tile = Tile::create(
+            $tileInput->getTileWidth(),
+            $tileRanges->getMinOfFirstRange(),
+            TileCounter::next()
+        );
 
         $rests->addRest(
             $tileLength - $tileRanges->getMinOfFirstRange(),

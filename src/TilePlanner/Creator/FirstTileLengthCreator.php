@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator;
 
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
@@ -35,6 +36,10 @@ final class FirstTileLengthCreator implements FirstTileLengthCreatorInterface
             }
         }
 
-        return Tile::create($tileInput->getTileWidth(), $tileLength);
+        return Tile::create(
+            $tileInput->getTileWidth(),
+            $tileLength,
+            TileCounter::next()
+        );
     }
 }

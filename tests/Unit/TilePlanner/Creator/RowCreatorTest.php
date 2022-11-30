@@ -11,6 +11,7 @@ use TilePlanner\TilePlanner\Creator\RowCreator;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
@@ -26,12 +27,12 @@ final class RowCreatorTest extends TestCase
         $firstTileLengthCalculator = $this->createMock(FirstTileLengthCreatorInterface::class);
         $firstTileLengthCalculator
             ->method('create')
-            ->willReturn(Tile::create(15, 25));
+            ->willReturn(Tile::create(20, 120, 1));
 
         $lastTileLengthCalculator = $this->createMock(LastTileLengthCreatorInterface::class);
         $lastTileLengthCalculator
             ->method('create')
-            ->willReturn(Tile::create(15, 25));
+            ->willReturn(Tile::create(20, 120, 1));
 
         $this->creator = new RowCreator($firstTileLengthCalculator, $lastTileLengthCalculator);
     }
@@ -43,13 +44,12 @@ final class RowCreatorTest extends TestCase
 
         $tileInput = new TilePlanInput(
             Room::create(200, 100),
-            Tile::create(20, 50),
+            Tile::create(20, 120),
             new LayingOptions(0)
         );
 
         $actualRow = $this->creator->createRow($tileInput, $plan, $rest);
-
-        self::assertCount(5, $actualRow->getTiles());
+        self::assertCount(2, $actualRow->getTiles());
     }
 
     public function test_row_has_same_with_as_tile(): void
@@ -84,5 +84,21 @@ final class RowCreatorTest extends TestCase
         $actualRow = $this->creator->createRow($tileInput, $plan, $rest);
 
         $this->assertEquals(10, $actualRow->getWidth());
+    }
+
+    public function test_first_tile_of_row_has_number_one(): void
+    {
+        $plan = new TilePlan();
+        $rest = new Rests();
+
+        $tileInput = new TilePlanInput(
+            Room::create(450, 330),
+            Tile::create(20, 120),
+            new LayingOptions(30)
+        );
+
+        $actualRow = $this->creator->createRow($tileInput, $plan, $rest);
+
+        $this->assertEquals(1, $actualRow->getTiles()[0]->getNumber());
     }
 }

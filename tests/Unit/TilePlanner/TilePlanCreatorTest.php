@@ -23,7 +23,7 @@ final class TilePlanCreatorTest extends TestCase
         $rowCreator = $this->createStub(RowCreatorInterface::class);
         $rowCreator->method('createRow')->willReturn(
             (new Row())
-                ->addTile(Tile::create(25, 100))
+                ->addTile(Tile::create(25, 100, 10))
         );
 
         $rests = new Rests();

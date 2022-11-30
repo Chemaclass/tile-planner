@@ -8,8 +8,6 @@ use JsonSerializable;
 
 final class Tile implements JsonSerializable
 {
-    private static int $numberCounter = 1;
-
     public static function create(float $width, float $length, ?int $number = null): self
     {
         return new self($width, $length, $number);
@@ -18,13 +16,8 @@ final class Tile implements JsonSerializable
     private function __construct(
         private float $width,
         private float $length,
-        private ?int $number = null
-    ) {
-        if ($number == null) {
-            $this->number = self::$numberCounter;
-            self::$numberCounter++;
-        }
-    }
+        private ?int $number
+    ) {}
 
     public function getWidth(): float
     {
@@ -36,7 +29,7 @@ final class Tile implements JsonSerializable
         return $this->length;
     }
 
-    public function getNumber(): int
+    public function getNumber(): ?int
     {
         return $this->number;
     }

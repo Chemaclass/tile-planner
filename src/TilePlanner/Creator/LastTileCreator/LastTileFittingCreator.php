@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator\LastTileCreator;
 
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -17,7 +18,11 @@ final class LastTileFittingCreator implements LastTileCreatorInterface
         $restOfRow = $tileInput->getRoomWidth() - $usedRowLength;
         $restOfTile = $tileInput->getTileLength() - $restOfRow;
 
-        $tile = Tile::create($tileInput->getTileWidth(), $restOfRow);
+        $tile = Tile::create(
+            $tileInput->getTileWidth(),
+            $restOfRow,
+            TileCounter::next()
+        );
 
         $rests->addRest(
             $restOfTile,

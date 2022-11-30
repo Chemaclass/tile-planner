@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator;
 
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
@@ -38,6 +39,10 @@ final class LastTileLengthCreator implements LastTileLengthCreatorInterface
             }
         }
 
-        return Tile::create($tileInput->getTileWidth(), $tileLength);
+        return Tile::create(
+            $tileInput->getTileWidth(),
+            $tileLength,
+            TileCounter::next()
+        );
     }
 }

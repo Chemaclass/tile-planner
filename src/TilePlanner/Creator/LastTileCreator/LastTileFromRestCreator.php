@@ -19,7 +19,11 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
         $foundRest = $this->findTileInRests($restOfRow, $rests);
 
         if ($foundRest !== null) {
-            return Tile::create($tileInput->getTileWidth(), $foundRest->getLength(), $foundRest->getNumber());
+            return Tile::create(
+                $tileInput->getTileWidth(),
+                $foundRest->getLength(),
+                $foundRest->getNumber()
+            );
         }
 
         return null;

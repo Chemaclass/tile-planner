@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -46,7 +47,11 @@ final class FullTileCreator implements FirstTileCreatorInterface
             )
             && $this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())
         ) {
-            return Tile::create($tileInput->getTileWidth(), $tileLength);
+            return Tile::create(
+                $tileInput->getTileWidth(),
+                $tileLength,
+                TileCounter::next(),
+            );
         }
 
         return null;
