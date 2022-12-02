@@ -15,7 +15,7 @@ final class TileCounter
         return self::$numberCounter;
     }
 
-    public function current(): int
+    public static function current(): int
     {
         return self::$numberCounter;
     }
