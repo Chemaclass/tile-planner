@@ -9,9 +9,7 @@ use TilePlanner\TilePlanner\Models\LengthRange;
 final class RangeValidator implements RangeValidatorInterface
 {
     /**
-     * @param  float             $length
-     * @param  list<LengthRange> $firstTileRanges
-     * @return bool
+     * @param list<LengthRange> $firstTileRanges
      */
     public function isInRange(float $length, array $firstTileRanges): bool
     {

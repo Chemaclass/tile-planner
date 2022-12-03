@@ -2,25 +2,26 @@
 
 namespace TilePlanner\Controller;
 
-use TilePlanner\Form\TilePlannerType;
-use TilePlanner\Shared\StringToFloatConverter;
-use TilePlanner\TilePlanner\Models\LayingOptions;
-use TilePlanner\TilePlanner\Models\Room;
-use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\TilePlannerFacadeInterface;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Assert\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use TilePlanner\Form\TilePlannerType;
+use TilePlanner\Shared\StringToFloatConverter;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlannerFacadeInterface;
 
 class TilePlannerController extends AbstractController
 {
     public function __construct(
         private TilePlannerFacadeInterface $tilePlannerFacade,
         private StringToFloatConverter $stringToFloatConverter,
-    ) {}
+    ) {
+    }
 
     #[Route('/', name: 'index')]
     public function index(Request $request): Response
@@ -49,13 +50,14 @@ class TilePlannerController extends AbstractController
                     'index.twig',
                     [
                         'tilePlannerInputForm' => $form->createView(),
-                        'error' => 'Invalid input: ' . $exception->getMessage()
+                        'error' => 'Invalid input: '.$exception->getMessage(),
                     ]
                 );
             }
 
             $plan = $this->tilePlannerFacade
-                ->createPlan($tileInput);
+                ->createPlan($tileInput)
+            ;
         }
 
         return $this->render(

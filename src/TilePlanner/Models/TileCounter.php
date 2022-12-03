@@ -10,7 +10,7 @@ final class TileCounter
 
     public static function next(): int
     {
-        self::$numberCounter++;
+        ++self::$numberCounter;
 
         return self::$numberCounter;
     }

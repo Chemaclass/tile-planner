@@ -10,7 +10,8 @@ final class TilePlanInput
         private Room $room,
         private Tile $tile,
         private LayingOptions $layingOptions,
-    ) {}
+    ) {
+    }
 
     public function getRoomWidth(): float
     {
@@ -28,7 +29,7 @@ final class TilePlanInput
 
     public function getRoomDepth(): float
     {
-        if ($this->layingOptions->getGapWidth() !== null && $this->layingOptions->getGapWidth() > 0) {
+        if (null !== $this->layingOptions->getGapWidth() && $this->layingOptions->getGapWidth() > 0) {
             return $this->room->getDepth() - ($this->layingOptions->getGapWidth() * $this->getTotalVerticalGaps());
         }
 
@@ -43,16 +44,6 @@ final class TilePlanInput
     public function getTileLength(): float
     {
         return $this->tile->getLength();
-    }
-
-    private function getTotalHorizontalGaps(): int
-    {
-        return (int)floor($this->room->getWidth() / $this->tile->getLength());
-    }
-
-    private function getTotalVerticalGaps(): int
-    {
-        return (int)floor($this->room->getDepth() / $this->tile->getWidth());
     }
 
     public function getLayingType(): string
@@ -73,5 +64,15 @@ final class TilePlanInput
     public function getCostsPerSquare(): float
     {
         return $this->layingOptions->getCostsPerSquare();
+    }
+
+    private function getTotalHorizontalGaps(): int
+    {
+        return (int) floor($this->room->getWidth() / $this->tile->getLength());
+    }
+
+    private function getTotalVerticalGaps(): int
+    {
+        return (int) floor($this->room->getDepth() / $this->tile->getWidth());
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner;
 
+use Gacela\Framework\AbstractFacade;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use Gacela\Framework\AbstractFacade;
 
 /**
  * @method TilePlannerFactory getFactory()
@@ -17,6 +17,7 @@ final class TilePlannerFacade extends AbstractFacade implements TilePlannerFacad
     {
         return $this->getFactory()
             ->createTilePlanCreator($tileInput->getLayingType())
-            ->create($tileInput);
+            ->create($tileInput)
+        ;
     }
 }

@@ -12,7 +12,7 @@ final class DeviationValidator implements DeviationValidatorInterface
         float $tileMinLength,
         float $allowedDifference
     ): bool {
-        if ($lastLength === null
+        if (null === $lastLength
             && $currentLength >= $tileMinLength) {
             return true;
         }

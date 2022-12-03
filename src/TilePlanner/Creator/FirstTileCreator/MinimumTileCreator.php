@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\TileCounter;
-use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TileCounter;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
 
 final class MinimumTileCreator implements FirstTileCreatorInterface
@@ -41,7 +41,8 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
             $minLengthOfFirstRange,
             $lengthTileLastRow,
             $tileMinLength,
-            TilePlannerConstants::MIN_DEVIATION)
+            TilePlannerConstants::MIN_DEVIATION
+        )
         ) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),

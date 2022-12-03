@@ -16,6 +16,7 @@ final class TilePlanner
 
         return $factory
             ->createTilePlanCreator($planInput->getLayingType())
-            ->create($planInput);
+            ->create($planInput)
+        ;
     }
 }

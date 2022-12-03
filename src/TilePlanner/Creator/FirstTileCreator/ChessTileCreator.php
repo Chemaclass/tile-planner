@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\TileCounter;
-use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TileCounter;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class ChessTileCreator implements FirstTileCreatorInterface
@@ -28,8 +28,8 @@ final class ChessTileCreator implements FirstTileCreatorInterface
 
     public function create(
         TilePlanInput $tileInput,
-        TilePlan      $plan,
-        Rests         $rests
+        TilePlan $plan,
+        Rests $rests
     ): ?Tile {
         $tileLength = $tileInput->getTileLength();
         $tileRanges = $this->rangeCreator->calculateRanges($tileInput);

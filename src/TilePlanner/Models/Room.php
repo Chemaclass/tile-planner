@@ -8,15 +8,16 @@ final class Room
 {
     private const ROUND_PRECISION = 2;
 
+    private function __construct(
+        private float $width,
+        private float $depth
+    ) {
+    }
+
     public static function create(float $width, float $depth): self
     {
         return new self($width, $depth);
     }
-
-    private function __construct(
-        private float $width,
-        private float $depth
-    ) {}
 
     public function getWidth(): float
     {

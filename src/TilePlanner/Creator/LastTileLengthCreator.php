@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator;
 
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use TilePlanner\TilePlanner\Models\Rests;
-use TilePlanner\TilePlanner\Models\Tile;
 
 final class LastTileLengthCreator implements LastTileLengthCreatorInterface
 {
@@ -25,16 +25,16 @@ final class LastTileLengthCreator implements LastTileLengthCreatorInterface
 
     public function create(
         TilePlanInput $tileInput,
-        TilePlan      $plan,
-        Rests         $rests,
-        float         $usedRowLength
+        TilePlan $plan,
+        Rests $rests,
+        float $usedRowLength
     ): Tile {
         $tileLength = $tileInput->getTileLength();
 
         foreach ($this->lastTileLengthCalculator as $calculator) {
             $tile = $calculator->create($tileInput, $plan, $rests, $usedRowLength);
 
-            if ($tile !== null) {
+            if (null !== $tile) {
                 return $tile;
             }
         }

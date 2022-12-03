@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner;
 
+use Gacela\Framework\AbstractFactory;
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\ChessTileCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
@@ -17,14 +18,13 @@ use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestCreator;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestForChessTypeCreator;
 use TilePlanner\TilePlanner\Creator\LastTileLengthCreator;
-use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
 use TilePlanner\TilePlanner\Creator\RowCreator;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Validator\DeviationValidator;
 use TilePlanner\TilePlanner\Validator\RangeValidator;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
-use Gacela\Framework\AbstractFactory;
 
 final class TilePlannerFactory extends AbstractFactory
 {
@@ -41,7 +41,7 @@ final class TilePlannerFactory extends AbstractFactory
         $firstTileCalculator = $this->createFirstTileLengthCalculator();
         $lastTileCalculator = $this->createLastTileLengthCalculator();
 
-        if ($layingType === TilePlannerType::TYPE_CHESS) {
+        if (TilePlannerType::TYPE_CHESS === $layingType) {
             $firstTileCalculator = $this->createFirstTileLengthCalculatorForChessType();
             $lastTileCalculator = $this->createLastTileLengthCalculatorForChessType();
         }
@@ -75,7 +75,7 @@ final class TilePlannerFactory extends AbstractFactory
     {
         return new FirstTileLengthCreator(
             [
-                $this->createChessTileCalculator()
+                $this->createChessTileCalculator(),
             ]
         );
     }
@@ -137,7 +137,7 @@ final class TilePlannerFactory extends AbstractFactory
         return new LastTileLengthCreator(
             [
                 $this->createLastTileFromRestCreator(),
-                $this->createLastTileFittingCreator()
+                $this->createLastTileFittingCreator(),
             ]
         );
     }
@@ -157,7 +157,7 @@ final class TilePlannerFactory extends AbstractFactory
         return new LastTileLengthCreator(
             [
                 $this->createLastTileFromRestForChessTypeCreator(),
-                $this->createLastTileFittingCreator()
+                $this->createLastTileFittingCreator(),
             ]
         );
     }
