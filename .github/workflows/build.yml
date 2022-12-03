@@ -28,6 +28,11 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-ansi --no-progress
 
+      - name: PHP Code Style (phpcs)
+        uses: chindit/actions-phpcs@master
+        with:
+          dir: src/
+
       - name: PHPStan
         run: vendor/bin/phpstan analyse -c phpstan.neon
 
