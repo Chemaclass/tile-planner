@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator;
 
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
@@ -101,6 +102,7 @@ final class RowCreator implements RowCreatorInterface
         return Tile::create(
             $width,
             $length,
+            TileCounter::next()
         );
     }
 

@@ -6,6 +6,7 @@ namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -59,7 +60,11 @@ final class TileFromRestCreator implements FirstTileCreatorInterface
                 ) {
                     $rests->removeRest($restLength, TilePlannerConstants::RESTS_LEFT);
 
-                    return Tile::create($tileInput->getTileWidth(), $restLength, $rest->getNumber());
+                    return Tile::create(
+                        $tileInput->getTileWidth(),
+                        $restLength,
+                        $rest->getNumber()
+                    );
                 }
             }
 
@@ -79,7 +84,11 @@ final class TileFromRestCreator implements FirstTileCreatorInterface
 
                 $rests->addThrash($trash);
 
-                return Tile::create($tileInput->getTileWidth(), $maxLengthOfFirstRange);
+                return Tile::create(
+                    $tileInput->getTileWidth(),
+                    $maxLengthOfFirstRange,
+                    TileCounter::next(),
+                );
             }
         }
 

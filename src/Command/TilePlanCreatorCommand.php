@@ -9,6 +9,7 @@ use TilePlanner\Shared\StringToFloatConverter;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\TilePlannerFacade;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use Gacela\Framework\DocBlockResolverAwareTrait;

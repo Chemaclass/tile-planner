@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -35,7 +36,11 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
 
         if ($this->canUseMaxLengthOfFirstRange($plan, $tileInput, $tileRanges)) {
-            $tile = Tile::create($tileInput->getTileWidth(), $maxLengthOfFirstRange);
+            $tile = Tile::create(
+                $tileInput->getTileWidth(),
+                $maxLengthOfFirstRange,
+                TileCounter::next()
+            );
 
             $restOfTile = $tileLength - $maxLengthOfFirstRange;
 
@@ -53,8 +58,8 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
     }
 
     private function canUseMaxLengthOfFirstRange(
-        TilePlan       $plan,
-        TilePlanInput  $tileInput,
+        TilePlan $plan,
+        TilePlanInput $tileInput,
         LengthRangeBag $tileRanges
     ): bool {
         if (
