@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\TileCounter;
-use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rest;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\Validator\DeviationValidator;
+use TilePlanner\TilePlanner\Models\TileCounter;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
-use TilePlanner\TilePlanner\Validator\RangeValidator;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromRestCreator implements FirstTileCreatorInterface
@@ -96,16 +93,15 @@ final class TileFromRestCreator implements FirstTileCreatorInterface
     }
 
     /**
-     * @param  list<Rest> $possibleRests
-     * @return Rest
+     * @param list<Rest> $possibleRests
      */
     private function getRestWithSmallestLength(array $possibleRests): Rest
     {
-        if (count($possibleRests) === 1) {
+        if (1 === \count($possibleRests)) {
             return array_pop($possibleRests);
         }
 
-        usort($possibleRests, static fn(Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
+        usort($possibleRests, static fn (Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
 
         return $possibleRests[0];
     }

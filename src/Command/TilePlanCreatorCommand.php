@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace TilePlanner\Command;
 
+use Gacela\Framework\DocBlockResolverAwareTrait;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\Shared\StringToFloatConverter;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\Models\TileCounter;
-use TilePlanner\TilePlanner\TilePlannerFacade;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use Gacela\Framework\DocBlockResolverAwareTrait;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use TilePlanner\TilePlanner\TilePlannerFacade;
 
 /**
  * @method TilePlannerFacade getFacade()
@@ -24,13 +23,13 @@ final class TilePlanCreatorCommand extends Command
 {
     use DocBlockResolverAwareTrait;
 
+    protected static $defaultName = 'app:create-layer-plan';
+
     public function __construct(
         private StringToFloatConverter $stringToFloatConverter
     ) {
         parent::__construct();
     }
-
-    protected static $defaultName = 'app:create-layer-plan';
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

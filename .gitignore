@@ -23,6 +23,7 @@ yarn-error.log
 reports/
 pcov/
 .phpcs-cache
+.php-cs-fixer.cache
 
 ###> phpunit/phpunit ###
 /phpunit.xml

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Models;
 
-use JsonSerializable;
-
-final class Row implements JsonSerializable
+final class Row implements \JsonSerializable
 {
     private array $tiles = [];
 
@@ -36,6 +34,6 @@ final class Row implements JsonSerializable
 
     public function jsonSerialize(): object
     {
-        return (object)get_object_vars($this);
+        return (object) get_object_vars($this);
     }
 }

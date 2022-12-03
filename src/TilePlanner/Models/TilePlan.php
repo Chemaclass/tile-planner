@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Models;
 
-use JsonSerializable;
-
-final class TilePlan implements JsonSerializable
+final class TilePlan implements \JsonSerializable
 {
     private array $rows = [];
 
@@ -79,7 +77,7 @@ final class TilePlan implements JsonSerializable
 
         $beforeLastRow = array_reverse($this->rows)[1] ?? null;
 
-        if ($beforeLastRow === null) {
+        if (null === $beforeLastRow) {
             return 0;
         }
 
@@ -88,7 +86,7 @@ final class TilePlan implements JsonSerializable
 
     public function getTotalRest(): float
     {
-        return (float)$this->totalRest;
+        return (float) $this->totalRest;
     }
 
     public function setTotalRest(float $totalRest): self
@@ -144,7 +142,7 @@ final class TilePlan implements JsonSerializable
             'rests' => $this->rests,
             'trash' => $this->trash,
             'totalTiles' => $this->totalTiles,
-            'totalRest' => $this->totalRest
+            'totalRest' => $this->totalRest,
         ];
     }
 
@@ -153,7 +151,7 @@ final class TilePlan implements JsonSerializable
         return $this->roomWidth;
     }
 
-    public function setRoomWidth(float $roomWidth): TilePlan
+    public function setRoomWidth(float $roomWidth): self
     {
         $this->roomWidth = $roomWidth;
 
@@ -165,7 +163,7 @@ final class TilePlan implements JsonSerializable
         return $this->roomDepth;
     }
 
-    public function setRoomDepth(float $roomDepth): TilePlan
+    public function setRoomDepth(float $roomDepth): self
     {
         $this->roomDepth = $roomDepth;
 
@@ -174,11 +172,11 @@ final class TilePlan implements JsonSerializable
 
     public function jsonSerialize(): object
     {
-        return (object)get_object_vars($this);
+        return (object) get_object_vars($this);
     }
 
     public function getRowsCount(): int
     {
-        return count($this->rows);
+        return \count($this->rows);
     }
 }

@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator;
 
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
+use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use TilePlanner\TilePlanner\Models\LengthRangeBag;
-use TilePlanner\TilePlanner\Models\Rests;
-use TilePlanner\TilePlanner\Models\Tile;
 
 final class FirstTileLengthCreator implements FirstTileLengthCreatorInterface
 {
@@ -31,7 +30,7 @@ final class FirstTileLengthCreator implements FirstTileLengthCreatorInterface
         foreach ($this->firstTileLengthCalculator as $calculator) {
             $tile = $calculator->create($tileInput, $plan, $rests);
 
-            if ($tile !== null) {
+            if (null !== $tile) {
                 return $tile;
             }
         }

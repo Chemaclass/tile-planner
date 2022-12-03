@@ -10,7 +10,7 @@ final class Rests
 {
     private static array $rest = [
         TilePlannerConstants::RESTS_LEFT => [],
-        TilePlannerConstants::RESTS_RIGHT => []
+        TilePlannerConstants::RESTS_RIGHT => [],
     ];
 
     private static array $trash = [];

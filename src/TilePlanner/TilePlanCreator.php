@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner;
 
 use TilePlanner\TilePlanner\Creator\RowCreatorInterface;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 
 final class TilePlanCreator
 {
@@ -27,7 +27,7 @@ final class TilePlanCreator
         $plan = new TilePlan();
         $totalRows = $this->getTotalRows($tileInput);
 
-        for ($i = 1; $i <= $totalRows; $i++) {
+        for ($i = 1; $i <= $totalRows; ++$i) {
             $row = $this->creator->createRow(
                 $tileInput,
                 $plan,
@@ -56,7 +56,7 @@ final class TilePlanCreator
 
     private function getTotalRows(TilePlanInput $input): int
     {
-        return (int)ceil(($input->getRoomDepth() / $input->getTileWidth()));
+        return (int) ceil($input->getRoomDepth() / $input->getTileWidth());
     }
 
     private function mergeTiles(array $tiles): array
@@ -68,7 +68,7 @@ final class TilePlanCreator
                 $mergedTrash[$trash] = 0;
             }
 
-            $mergedTrash[$trash]++;
+            ++$mergedTrash[$trash];
         }
 
         return $mergedTrash;
@@ -76,7 +76,7 @@ final class TilePlanCreator
 
     private function retrieveHighestTileNumberFromRow(Row $row): int
     {
-        $numbers = array_map(fn(Tile $tile) => $tile->getNumber(), $row->getTiles());
+        $numbers = array_map(fn (Tile $tile) => $tile->getNumber(), $row->getTiles());
 
         return max($numbers);
     }

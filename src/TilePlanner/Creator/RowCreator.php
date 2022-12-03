@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator;
 
-use TilePlanner\TilePlanner\Models\TileCounter;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TileCounter;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
 
 final class RowCreator implements RowCreatorInterface
 {
@@ -44,7 +44,7 @@ final class RowCreator implements RowCreatorInterface
             $row->addTile($tile);
 
             $this->usedRowLength += $tile->getLength();
-            $tileCounter++;
+            ++$tileCounter;
         }
 
         $rowWidth = $this->getRowWidth(
@@ -67,7 +67,7 @@ final class RowCreator implements RowCreatorInterface
 
     private function calculateTile(TilePlanInput $tileInput, int $tileCounter, TilePlan $plan, Rests $rests): Tile
     {
-        if ($tileCounter === 1) {
+        if (1 === $tileCounter) {
             return $this->firstTileLengthCalculator->create(
                 $tileInput,
                 $plan,

@@ -26,7 +26,7 @@ class TilePlannerType extends AbstractType
                     'choices' => [
                         'Klickvinyl / Klicklaminat' => 'click',
                         'Fliese' => 'tile',
-                    ]
+                    ],
                 ]
             )
             ->add(
@@ -38,7 +38,7 @@ class TilePlannerType extends AbstractType
                     'choices' => [
                         'mit Versatz' => self::TYPE_OFFSET,
                         'Schachbrett' => self::TYPE_CHESS,
-                    ]
+                    ],
                 ]
             )
             ->add(
@@ -48,8 +48,8 @@ class TilePlannerType extends AbstractType
                     'required' => true,
                     'label' => 'Fugenbreite [cm]',
                     'attr' => [
-                        'placeholder' => '0,5'
-                    ]
+                        'placeholder' => '0,5',
+                    ],
                 ]
             )
             ->add(
@@ -59,8 +59,8 @@ class TilePlannerType extends AbstractType
                     'required' => true,
                     'label' => 'Raumbreite [cm]',
                     'attr' => [
-                        'placeholder' => '450'
-                    ]
+                        'placeholder' => '450',
+                    ],
                 ]
             )
             ->add(
@@ -70,8 +70,8 @@ class TilePlannerType extends AbstractType
                     'required' => true,
                     'label' => 'Raumtiefe [cm]',
                     'attr' => [
-                        'placeholder' => '330'
-                    ]
+                        'placeholder' => '330',
+                    ],
                 ]
             )
             ->add(
@@ -81,8 +81,8 @@ class TilePlannerType extends AbstractType
                     'required' => true,
                     'label' => 'Länge Paneele [cm]',
                     'attr' => [
-                        'placeholder' => '120'
-                    ]
+                        'placeholder' => '120',
+                    ],
                 ]
             )
             ->add(
@@ -92,8 +92,8 @@ class TilePlannerType extends AbstractType
                     'required' => true,
                     'label' => 'Breite Paneele [cm]',
                     'attr' => [
-                        'placeholder' => '20'
-                    ]
+                        'placeholder' => '20',
+                    ],
                 ]
             )
             ->add(
@@ -103,8 +103,8 @@ class TilePlannerType extends AbstractType
                     'required' => true,
                     'label' => 'Mindesbreite Paneele [cm]',
                     'attr' => [
-                        'placeholder' => '30'
-                    ]
+                        'placeholder' => '30',
+                    ],
                 ]
             )
             ->add(
@@ -114,8 +114,8 @@ class TilePlannerType extends AbstractType
                     'required' => false,
                     'label' => 'Kosten pro Quadratmeter [e.g. 12.99]',
                     'attr' => [
-                        'placeholder' => '29,95'
-                    ]
+                        'placeholder' => '29,95',
+                    ],
                 ]
             )
             ->add(
@@ -127,7 +127,8 @@ class TilePlannerType extends AbstractType
                         'class' => 'col-4 btn btn-primary',
                     ],
                 ]
-            );
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

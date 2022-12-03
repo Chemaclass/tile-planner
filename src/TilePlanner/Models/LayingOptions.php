@@ -13,7 +13,8 @@ final class LayingOptions
         private float $costsPerSquare = 0,
         private string $layingType = TilePlannerType::TYPE_OFFSET,
         private ?float $gapWidth = null,
-    ){}
+    ) {
+    }
 
     public function getMinTileLength(): float
     {

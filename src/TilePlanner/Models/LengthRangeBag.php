@@ -7,7 +7,7 @@ namespace TilePlanner\TilePlanner\Models;
 final class LengthRangeBag
 {
     /**
-     * @var list<LengthRange> $ranges
+     * @var list<LengthRange>
      */
     private array $ranges = [];
 

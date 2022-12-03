@@ -12,16 +12,17 @@ final class LengthRange
 
     private float $max;
 
-    public static function withMinAndMax(float $min, float $max): self
-    {
-        Assertion::greaterOrEqualThan($max, $min);
-        return new self($min, $max);
-    }
-
     private function __construct(float $min, float $max)
     {
         $this->min = $min;
         $this->max = $max;
+    }
+
+    public static function withMinAndMax(float $min, float $max): self
+    {
+        Assertion::greaterOrEqualThan($max, $min);
+
+        return new self($min, $max);
     }
 
     public function getMin(): float

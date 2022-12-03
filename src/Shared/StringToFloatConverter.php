@@ -8,10 +8,10 @@ final class StringToFloatConverter
 {
     public function toFloat(?string $string): ?float
     {
-        if ($string === null) {
+        if (null === $string) {
             return null;
         }
 
-        return (float)str_replace(',', '.', $string);
+        return (float) str_replace(',', '.', $string);
     }
 }
