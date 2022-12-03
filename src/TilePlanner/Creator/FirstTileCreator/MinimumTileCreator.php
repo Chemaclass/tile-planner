@@ -37,12 +37,13 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
         $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
         $minLengthOfFirstRange = $tileRanges->getMinOfFirstRange();
 
-        if ($this->deviationValidator->isValidDeviation(
-            $minLengthOfFirstRange,
-            $lengthTileLastRow,
-            $tileMinLength,
-            TilePlannerConstants::MIN_DEVIATION
-        )
+        if (
+            $this->deviationValidator->isValidDeviation(
+                $minLengthOfFirstRange,
+                $lengthTileLastRow,
+                $tileMinLength,
+                TilePlannerConstants::MIN_DEVIATION
+            )
         ) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),

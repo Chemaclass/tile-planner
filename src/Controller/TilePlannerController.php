@@ -50,7 +50,7 @@ class TilePlannerController extends AbstractController
                     'index.twig',
                     [
                         'tilePlannerInputForm' => $form->createView(),
-                        'error' => 'Invalid input: '.$exception->getMessage(),
+                        'error' => 'Invalid input: ' . $exception->getMessage(),
                     ]
                 );
             }
