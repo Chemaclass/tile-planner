@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
+use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinder;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\Rest;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
@@ -17,18 +16,12 @@ use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromRestCreator implements FirstTileCreatorInterface
 {
-    private RangeValidatorInterface $rangeValidator;
-    private DeviationValidatorInterface $deviationValidator;
-    private TileLengthRangeCreatorInterface $rangeCalculator;
-
     public function __construct(
-        RangeValidatorInterface $rangeValidator,
-        DeviationValidatorInterface $deviationValidator,
-        TileLengthRangeCreatorInterface $rangeCalculator
+        private RangeValidatorInterface $rangeValidator,
+        private DeviationValidatorInterface $deviationValidator,
+        private TileLengthRangeCreatorInterface $rangeCalculator,
+        private SmallestRestFinder $smallestRestFinder,
     ) {
-        $this->rangeValidator = $rangeValidator;
-        $this->deviationValidator = $deviationValidator;
-        $this->rangeCalculator = $rangeCalculator;
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
@@ -65,7 +58,13 @@ final class TileFromRestCreator implements FirstTileCreatorInterface
                 }
             }
 
-            $smallestRest = $this->getRestWithSmallestLength($rests->getRests(TilePlannerConstants::RESTS_LEFT));
+            $smallestRest = $this->smallestRestFinder
+                ->findSmallestRest($rests->getRests(TilePlannerConstants::RESTS_LEFT));
+
+            if ($smallestRest === null) {
+                return null;
+            }
+
             if (
                 $maxLengthOfFirstRange <= $smallestRest->getLength()
                 && $this->deviationValidator->isValidDeviation(
@@ -90,19 +89,5 @@ final class TileFromRestCreator implements FirstTileCreatorInterface
         }
 
         return null;
-    }
-
-    /**
-     * @param list<Rest> $possibleRests
-     */
-    private function getRestWithSmallestLength(array $possibleRests): Rest
-    {
-        if (1 === \count($possibleRests)) {
-            return array_pop($possibleRests);
-        }
-
-        usort($possibleRests, static fn (Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
-
-        return $possibleRests[0];
     }
 }
