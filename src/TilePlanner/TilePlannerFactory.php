@@ -11,9 +11,11 @@ use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FullTileCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
-use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromRestCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromMatchingRestCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromSmallestRestCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileLengthCreator;
 use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinder;
+use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinderInterface;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestCreator;
@@ -64,7 +66,8 @@ final class TilePlannerFactory extends AbstractFactory
     {
         return new FirstTileLengthCreator(
             [
-                $this->createTileFromRestCalculator(),
+                $this->createTileFromMatchinRestCalculator(),
+                $this->createTileFromSmallestRestCalculator(),
                 $this->createFullTileCalculator(),
                 $this->createMaximumTileCreator(),
                 $this->createMinimumTileCalculator(),
@@ -81,10 +84,18 @@ final class TilePlannerFactory extends AbstractFactory
         );
     }
 
-    private function createTileFromRestCalculator(): FirstTileCreatorInterface
+    private function createTileFromMatchinRestCalculator(): FirstTileCreatorInterface
     {
-        return new TileFromRestCreator(
+        return new TileFromMatchingRestCreator(
             $this->createRangeValidator(),
+            $this->createDeviationValidator(),
+            $this->createTileLengthRangeCalculator(),
+        );
+    }
+
+    private function createTileFromSmallestRestCalculator(): TileFromSmallestRestCreator
+    {
+        return new TileFromSmallestRestCreator(
             $this->createDeviationValidator(),
             $this->createTileLengthRangeCalculator(),
             $this->createSmallestRestFinder(),
@@ -169,7 +180,7 @@ final class TilePlannerFactory extends AbstractFactory
         return new LastTileFromRestForChessTypeCreator();
     }
 
-    private function createSmallestRestFinder(): SmallestRestFinder
+    private function createSmallestRestFinder(): SmallestRestFinderInterface
     {
         return new SmallestRestFinder();
     }

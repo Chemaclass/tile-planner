@@ -6,7 +6,7 @@ namespace TilePlanner\TilePlanner\Creator\Helper;
 
 use TilePlanner\TilePlanner\Models\Rest;
 
-final class SmallestRestFinder
+final class SmallestRestFinder implements SmallestRestFinderInterface
 {
     /**
      * @param list<Rest> $rests
