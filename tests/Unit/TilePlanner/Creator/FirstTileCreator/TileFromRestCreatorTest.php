@@ -113,20 +113,21 @@ final class TileFromRestCreatorTest extends TestCase
             [
                 TilePlannerConstants::RESTS_LEFT => [
                     Rest::create(80, 1),
-                    Rest::create(70, 2),
-                    Rest::create(50, 2),
+                    Rest::create(70, 3),
+                    Rest::create(50, 5),
                 ]
             ]
         );
 
         $expectedRest = [
             Rest::create(80, 1),
-            Rest::create(70, 2),
+            Rest::create(70, 3),
         ];
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertEquals(30, $actualTile->getLength());
+        self::assertEquals(5, $actualTile->getNumber());
         self::assertEquals($expectedRest, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
     }
 

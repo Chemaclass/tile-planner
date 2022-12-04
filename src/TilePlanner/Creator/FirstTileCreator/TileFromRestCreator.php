@@ -84,7 +84,7 @@ final class TileFromRestCreator implements FirstTileCreatorInterface
                 return Tile::create(
                     $tileInput->getTileWidth(),
                     $maxLengthOfFirstRange,
-                    TileCounter::next(),
+                    $smallestRest->getNumber(),
                 );
             }
         }
