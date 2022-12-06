@@ -138,7 +138,7 @@ final class TileFromSmallestRestCreatorTest extends TestCase
     public function test_return_tile_cut_of_from_one_found_rest(): void
     {
         $rangeValidator = $this->createMock(RangeValidatorInterface::class);
-        $rangeValidator->method('isInRange')->willReturn(false);
+        $rangeValidator->method('isInRange')->willReturn(true);
 
         $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
         $deviationValidator->method('isValidDeviation')->willReturn(true);
@@ -156,7 +156,7 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(80, 1),
+                    Rest::create(30, 1),
                 ]
             ]
         );
