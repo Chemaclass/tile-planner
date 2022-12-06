@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\Form\TilePlannerType;
-use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromRestCreator;
+use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromMatchingRestCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromSmallestRestCreator;
+use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinderInterface;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\LayingOptions;
-use TilePlanner\TilePlanner\Models\Room;
-use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rest;
 use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
-use PHPUnit\Framework\TestCase;
 
-final class TileFromRestCreatorTest extends TestCase
+final class TileFromSmallestRestCreatorTest extends TestCase
 {
     private TilePlanInput $tileInput;
 
@@ -34,11 +35,64 @@ final class TileFromRestCreatorTest extends TestCase
         );
     }
 
-    public function test_return_null_if_has_no_rests_for_left_side(): void
+    public function test_return_null_if_no_smallest_rest_was_found(): void
     {
-        $rangeValidator = $this->createMock(RangeValidatorInterface::class);
-        $rangeValidator->method('isInRange')->willReturn(false);
+        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
+        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
+        $rangeCreator->method('calculateRanges')->willReturn(
+            (new LengthRangeBag())
+                ->addRange((LengthRange::withMinAndMax(10, 30)))
+        );
+        $smallestRestFinder = $this->createStub(SmallestRestFinderInterface::class);
+        $smallestRestFinder->method('findSmallestRest')->willReturn(null);
 
+        $creator = new TileFromSmallestRestCreator(
+            $deviationValidator,
+            $rangeCreator,
+            $smallestRestFinder,
+        );
+
+        $plan = new TilePlan();
+        $rests = new Rests();
+        $rests::setRest(
+            [
+                TilePlannerConstants::RESTS_LEFT => [
+                    Rest::create(70, 3),
+                ]
+            ]
+        );
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
+
+        self::assertNull($actualTile);
+    }
+
+    public function test_return_null_if_rests_are_empty(): void
+    {
+        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
+        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
+        $rangeCreator->method('calculateRanges')->willReturn(
+            (new LengthRangeBag())
+                ->addRange((LengthRange::withMinAndMax(10, 30)))
+        );
+        $smallestRestFinder = $this->createStub(SmallestRestFinderInterface::class);
+        $smallestRestFinder->method('findSmallestRest')->willReturn(Rest::create(50, 5));
+
+        $creator = new TileFromSmallestRestCreator(
+            $deviationValidator,
+            $rangeCreator,
+            $smallestRestFinder,
+        );
+
+        $plan = new TilePlan();
+        $rests = new Rests();
+
+        $actualTile = $creator->create($this->tileInput, $plan, $rests);
+
+        self::assertNull($actualTile);
+    }
+
+    public function test_return_tile_cut_of_from_lowest_found_rest(): void
+    {
         $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
         $deviationValidator->method('isValidDeviation')->willReturn(true);
 
@@ -48,18 +102,40 @@ final class TileFromRestCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new TileFromRestCreator($rangeValidator, $deviationValidator, $rangeCreator);
+        $smallestRestFinder = $this->createStub(SmallestRestFinderInterface::class);
+        $smallestRestFinder->method('findSmallestRest')->willReturn(Rest::create(50, 5));
+
+        $creator = new TileFromSmallestRestCreator(
+            $deviationValidator,
+            $rangeCreator,
+            $smallestRestFinder,
+        );
 
         $plan = new TilePlan();
         $rests = new Rests();
-        $rests::setRest([]);
+        $rests::setRest(
+            [
+                TilePlannerConstants::RESTS_LEFT => [
+                    Rest::create(80, 1),
+                    Rest::create(70, 3),
+                    Rest::create(50, 5),
+                ]
+            ]
+        );
+
+        $expectedRest = [
+            Rest::create(80, 1),
+            Rest::create(70, 3),
+        ];
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
-        self::assertNull($actualTile);
+        self::assertEquals(30, $actualTile->getLength());
+        self::assertEquals(5, $actualTile->getNumber());
+        self::assertEquals($expectedRest, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
     }
 
-    public function test_return_first_found_and_matching_tile_from_rest(): void
+    public function test_return_tile_cut_of_from_one_found_rest(): void
     {
         $rangeValidator = $this->createMock(RangeValidatorInterface::class);
         $rangeValidator->method('isInRange')->willReturn(true);
@@ -73,85 +149,14 @@ final class TileFromRestCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new TileFromRestCreator($rangeValidator, $deviationValidator, $rangeCreator);
+        $creator = new TileFromMatchingRestCreator($rangeValidator, $deviationValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(35, 1)
-                ]
-            ]
-        );
-
-        $actualTile = $creator->create($this->tileInput, $plan, $rests);
-
-        self::assertEquals(35, $actualTile->getLength());
-        self::assertEquals(1, $actualTile->getNumber());
-    }
-
-    public function test_return_tile_cut_of_from_lowest_found_rest(): void
-    {
-        $rangeValidator = $this->createMock(RangeValidatorInterface::class);
-        $rangeValidator->method('isInRange')->willReturn(false);
-
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(true);
-
-        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
-        $rangeCreator->method('calculateRanges')->willReturn(
-            (new LengthRangeBag())
-                ->addRange((LengthRange::withMinAndMax(10, 30)))
-        );
-
-        $creator = new TileFromRestCreator($rangeValidator, $deviationValidator, $rangeCreator);
-
-        $plan = new TilePlan();
-        $rests = new Rests();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(80, 1),
-                    Rest::create(70, 2),
-                    Rest::create(50, 2),
-                ]
-            ]
-        );
-
-        $expectedRest = [
-            Rest::create(80, 1),
-            Rest::create(70, 2),
-        ];
-
-        $actualTile = $creator->create($this->tileInput, $plan, $rests);
-
-        self::assertEquals(30, $actualTile->getLength());
-        self::assertEquals($expectedRest, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
-    }
-
-    public function test_return_tile_cut_of_from_one_found_rest(): void
-    {
-        $rangeValidator = $this->createMock(RangeValidatorInterface::class);
-        $rangeValidator->method('isInRange')->willReturn(false);
-
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(true);
-
-        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
-        $rangeCreator->method('calculateRanges')->willReturn(
-            (new LengthRangeBag())
-                ->addRange((LengthRange::withMinAndMax(10, 30)))
-        );
-
-        $creator = new TileFromRestCreator($rangeValidator, $deviationValidator, $rangeCreator);
-
-        $plan = new TilePlan();
-        $rests = new Rests();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(80, 1),
+                    Rest::create(30, 1),
                 ]
             ]
         );
