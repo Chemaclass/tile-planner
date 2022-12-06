@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinder;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\Rest;
 use TilePlanner\TilePlanner\Models\Rests;
@@ -69,12 +68,14 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
                 continue;
             }
 
-            if ($this->deviationValidator->isValidDeviation(
-                $restLength,
-                $lengthTileLastRow,
-                $tileMinLength,
-                TilePlannerConstants::MIN_DEVIATION
-            )) {
+            if (
+                $this->deviationValidator->isValidDeviation(
+                    $restLength,
+                    $lengthTileLastRow,
+                    $tileMinLength,
+                    TilePlannerConstants::MIN_DEVIATION
+                )
+            ) {
                 return $rest;
             }
         }
