@@ -12,6 +12,7 @@ use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 {
@@ -19,6 +20,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         private DeviationValidatorInterface $deviationValidator,
         private TileLengthRangeCreatorInterface $rangeCalculator,
         private SmallestRestFinderInterface $smallestRestFinder,
+        private RangeValidatorInterface $rangeValidator,
     ) {
     }
 
@@ -39,12 +41,23 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             return null;
         }
 
-        $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
+        $tileWidthWithDeviation = $lengthTileLastRow - TilePlannerConstants::MIN_DEVIATION;
+
+        if (!$this->rangeValidator->isInRange($tileWidthWithDeviation, $tileRanges->getRanges())) {
+            return null;
+        }
+
+        if ($smallestRest->getLength() < $tileWidthWithDeviation) {
+            return null;
+        }
+
+        if (count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $tileInput->getTotalRows() - $plan->getRowsCount()) {
+            return null;
+        }
 
         if (
-            $maxLengthOfFirstRange <= $smallestRest->getLength()
-            && $this->deviationValidator->isValidDeviation(
-                $maxLengthOfFirstRange,
+            $this->deviationValidator->isValidDeviation(
+                $tileWidthWithDeviation,
                 $lengthTileLastRow,
                 $tileMinLength,
                 TilePlannerConstants::MIN_DEVIATION
@@ -52,13 +65,13 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         ) {
             $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
 
-            $trash = $smallestRest->getLength() - $maxLengthOfFirstRange;
+            $trash = $smallestRest->getLength() - $tileWidthWithDeviation;
 
             $rests->addThrash($trash);
 
             return Tile::create(
                 $tileInput->getTileWidth(),
-                $maxLengthOfFirstRange,
+                $tileWidthWithDeviation,
                 $smallestRest->getNumber(),
             );
         }

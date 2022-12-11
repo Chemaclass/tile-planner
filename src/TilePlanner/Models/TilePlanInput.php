@@ -75,4 +75,9 @@ final class TilePlanInput
     {
         return (int) floor($this->room->getDepth() / $this->tile->getWidth());
     }
+
+    public function getTotalRows(): int
+    {
+        return (int) ceil($this->getRoomDepth() / $this->getTileWidth());
+    }
 }

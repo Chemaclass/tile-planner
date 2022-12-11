@@ -10,6 +10,7 @@ use TilePlanner\TilePlanner\Creator\FirstTileCreator\ChessTileCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FirstTileCreatorInterface;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\FullTileCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MaximumTileCreator;
+use TilePlanner\TilePlanner\Creator\FirstTileCreator\MaximumTileWithDeviationCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromMatchingRestCreator;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\TileFromSmallestRestCreator;
@@ -66,8 +67,9 @@ final class TilePlannerFactory extends AbstractFactory
     {
         return new FirstTileLengthCreator(
             [
-                $this->createTileFromMatchinRestCalculator(),
+                $this->createTileFromMatchingRestCalculator(),
                 $this->createTileFromSmallestRestCalculator(),
+                $this->createMaximumTileWithDeviationCreator(),
                 $this->createFullTileCalculator(),
                 $this->createMaximumTileCreator(),
                 $this->createMinimumTileCalculator(),
@@ -84,7 +86,7 @@ final class TilePlannerFactory extends AbstractFactory
         );
     }
 
-    private function createTileFromMatchinRestCalculator(): FirstTileCreatorInterface
+    private function createTileFromMatchingRestCalculator(): FirstTileCreatorInterface
     {
         return new TileFromMatchingRestCreator(
             $this->createRangeValidator(),
@@ -99,6 +101,7 @@ final class TilePlannerFactory extends AbstractFactory
             $this->createDeviationValidator(),
             $this->createTileLengthRangeCalculator(),
             $this->createSmallestRestFinder(),
+            $this->createRangeValidator(),
         );
     }
 
@@ -122,6 +125,14 @@ final class TilePlannerFactory extends AbstractFactory
     private function createMaximumTileCreator(): FirstTileCreatorInterface
     {
         return new MaximumTileCreator(
+            $this->createDeviationValidator(),
+            $this->createTileLengthRangeCalculator()
+        );
+    }
+
+    private function createMaximumTileWithDeviationCreator(): FirstTileCreatorInterface
+    {
+        return new MaximumTileWithDeviationCreator(
             $this->createDeviationValidator(),
             $this->createTileLengthRangeCalculator()
         );
