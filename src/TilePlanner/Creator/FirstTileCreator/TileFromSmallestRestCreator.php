@@ -11,13 +11,11 @@ use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private DeviationValidatorInterface $deviationValidator,
         private TileLengthRangeCreatorInterface $rangeCalculator,
         private SmallestRestFinderInterface $smallestRestFinder,
         private RangeValidatorInterface $rangeValidator,
@@ -26,56 +24,54 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
     {
-        $tileMinLength = $tileInput->getMinTileLength();
-        $lengthTileLastRow = $plan->getLastRowLength();
-        $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
+        $tileWidthWithDeviation = $this->calculateTileWithDeviation($plan, $tileInput, $rests);
 
-        if (!$rests->hasRest(TilePlannerConstants::RESTS_LEFT)) {
+        if ($tileWidthWithDeviation === null) {
             return null;
         }
 
-        $smallestRest = $this->smallestRestFinder
-            ->findSmallestRest($rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        $smallestRest = $this
+            ->smallestRestFinder
+            ->findSmallestRestWithMinLength(
+                TilePlannerConstants::RESTS_LEFT,
+                $tileWidthWithDeviation
+            );
 
         if ($smallestRest === null) {
             return null;
         }
 
+        $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
+        $trash = $smallestRest->getLength() - $tileWidthWithDeviation;
+        $rests->addThrash($trash);
+
+        return Tile::create(
+            $tileInput->getTileWidth(),
+            $tileWidthWithDeviation,
+            $smallestRest->getNumber(),
+        );
+    }
+
+    private function calculateTileWithDeviation(
+        TilePlan $plan,
+        TilePlanInput $tileInput,
+        Rests $rests
+    ): ?float {
+        $lengthTileLastRow = $plan->getLastRowLength();
+        $ranges = $this->rangeCalculator->calculateRanges($tileInput)->getRanges();
+
         $tileWidthWithDeviation = $lengthTileLastRow - TilePlannerConstants::MIN_DEVIATION;
 
-        if (!$this->rangeValidator->isInRange($tileWidthWithDeviation, $tileRanges->getRanges())) {
+        if (!$this->rangeValidator->isInRange($tileWidthWithDeviation, $ranges)) {
             return null;
         }
 
-        if ($smallestRest->getLength() < $tileWidthWithDeviation) {
+        $remainingRows = $tileInput->getTotalRows() - $plan->getRowsCount();
+
+        if (count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
             return null;
         }
 
-        if (count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $tileInput->getTotalRows() - $plan->getRowsCount()) {
-            return null;
-        }
-
-        if (
-            $this->deviationValidator->isValidDeviation(
-                $tileWidthWithDeviation,
-                $lengthTileLastRow,
-                $tileMinLength,
-                TilePlannerConstants::MIN_DEVIATION
-            )
-        ) {
-            $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
-
-            $trash = $smallestRest->getLength() - $tileWidthWithDeviation;
-
-            $rests->addThrash($trash);
-
-            return Tile::create(
-                $tileInput->getTileWidth(),
-                $tileWidthWithDeviation,
-                $smallestRest->getNumber(),
-            );
-        }
-
-        return null;
+        return $tileWidthWithDeviation;
     }
 }

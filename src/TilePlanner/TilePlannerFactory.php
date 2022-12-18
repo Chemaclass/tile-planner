@@ -98,7 +98,6 @@ final class TilePlannerFactory extends AbstractFactory
     private function createTileFromSmallestRestCalculator(): TileFromSmallestRestCreator
     {
         return new TileFromSmallestRestCreator(
-            $this->createDeviationValidator(),
             $this->createTileLengthRangeCalculator(),
             $this->createSmallestRestFinder(),
             $this->createRangeValidator(),
@@ -193,6 +192,8 @@ final class TilePlannerFactory extends AbstractFactory
 
     private function createSmallestRestFinder(): SmallestRestFinderInterface
     {
-        return new SmallestRestFinder();
+        return new SmallestRestFinder(
+            $this->createRest()
+        );
     }
 }
