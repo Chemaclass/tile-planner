@@ -16,13 +16,13 @@ final class DeviationValidatorTest extends TestCase
         $currentLength = 20;
         $lastLength = null;
         $tileMinLength = 30;
-        $allowedDifference = 10;
+        $minOffset = 10;
 
         $actual = $validator->isValidOffset(
             $currentLength,
             $lastLength,
             $tileMinLength,
-            $allowedDifference
+            $minOffset
         );
 
         self::assertFalse($actual);
@@ -35,13 +35,13 @@ final class DeviationValidatorTest extends TestCase
         $currentLength = 20;
         $lastLength = 30;
         $tileMinLength = 30;
-        $allowedDifference = 10;
+        $minOffset = 10;
 
         $actual = $validator->isValidOffset(
             $currentLength,
             $lastLength,
             $tileMinLength,
-            $allowedDifference
+            $minOffset
         );
 
         self::assertFalse($actual);
@@ -54,13 +54,13 @@ final class DeviationValidatorTest extends TestCase
         $currentLength = 50;
         $lastLength = 45;
         $tileMinLength = 20;
-        $allowedDifference = 10;
+        $minOffset = 10;
 
         $actual = $validator->isValidOffset(
             $currentLength,
             $lastLength,
             $tileMinLength,
-            $allowedDifference
+            $minOffset
         );
 
         self::assertFalse($actual);
@@ -73,13 +73,13 @@ final class DeviationValidatorTest extends TestCase
         $currentLength = 50;
         $lastLength = 40;
         $tileMinLength = 20;
-        $allowedDifference = 10;
+        $minOffset = 10;
 
         $actual = $validator->isValidOffset(
             $currentLength,
             $lastLength,
             $tileMinLength,
-            $allowedDifference
+            $minOffset
         );
 
         self::assertTrue($actual);

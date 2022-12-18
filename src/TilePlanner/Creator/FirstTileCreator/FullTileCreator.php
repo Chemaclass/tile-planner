@@ -31,14 +31,13 @@ final class FullTileCreator implements FirstTileCreatorInterface
         $lengthTileLastRow = $plan->getLastRowLength();
         $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
 
-        if (
-            $this->offsetValidator->isValidOffset(
+        if ($this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())
+            && $this->offsetValidator->isValidOffset(
                 $tileLength,
                 $lengthTileLastRow,
                 $tileMinLength,
-                TilePlannerConstants::DEFAULT_MIN_OFFSET
+                $tileInput->getLayingOptions()->getMinOffset()
             )
-            && $this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())
         ) {
             return Tile::create(
                 $tileInput->getTileWidth(),

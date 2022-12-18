@@ -60,7 +60,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         $lengthTileLastRow = $plan->getLastRowLength();
         $ranges = $this->rangeCalculator->calculateRanges($tileInput)->getRanges();
 
-        $tileWidthIncludingOffset = $lengthTileLastRow - TilePlannerConstants::DEFAULT_MIN_OFFSET;
+        $tileWidthIncludingOffset = $lengthTileLastRow - $tileInput->getLayingOptions()->getMinOffset();
 
         if (!$this->rangeValidator->isInRange($tileWidthIncludingOffset, $ranges)) {
             return null;

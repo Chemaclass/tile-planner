@@ -37,11 +37,11 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
         if ($this->canUseMaxLengthOfFirstRange($plan, $tileInput, $tileRanges)) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
-                $maxLengthOfFirstRange - TilePlannerConstants::DEFAULT_MIN_OFFSET,
+                $maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset(),
                 TileCounter::next()
             );
 
-            $restOfTile = $tileLength - ($maxLengthOfFirstRange - TilePlannerConstants::DEFAULT_MIN_OFFSET);
+            $restOfTile = $tileLength - ($maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset());
 
             $rests->addRest(
                 $restOfTile,
@@ -62,10 +62,10 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
         LengthRangeBag $tileRanges
     ): bool {
         return $this->offsetValidator->isValidOffset(
-            $tileRanges->getMaxOfFirstRange() - TilePlannerConstants::DEFAULT_MIN_OFFSET,
+            $tileRanges->getMaxOfFirstRange() - $tileInput->getLayingOptions()->getMinOffset(),
             $plan->getLastRowLength(),
             $tileInput->getMinTileLength(),
-            TilePlannerConstants::DEFAULT_MIN_OFFSET
+            $tileInput->getLayingOptions()->getMinOffset()
         );
     }
 }

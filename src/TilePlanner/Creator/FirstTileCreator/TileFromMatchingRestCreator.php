@@ -73,7 +73,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
                     $restLength,
                     $lengthTileLastRow,
                     $tileMinLength,
-                    TilePlannerConstants::DEFAULT_MIN_OFFSET
+                    $tileInput->getLayingOptions()->getMinOffset(),
                 )
             ) {
                 return $rest;

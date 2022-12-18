@@ -10,7 +10,7 @@ final class OffsetValidator implements OffsetValidatorInterface
         float $currentLength,
         ?float $lastLength,
         float $tileMinLength,
-        float $allowedDifference
+        float $minOffset
     ): bool {
         if (null === $lastLength && $currentLength >= $tileMinLength) {
             return true;
@@ -18,8 +18,8 @@ final class OffsetValidator implements OffsetValidatorInterface
 
         if (
             $currentLength >= $tileMinLength
-            && ($currentLength <= $lastLength - $allowedDifference
-            || $currentLength >= $lastLength + $allowedDifference)
+            && ($currentLength <= $lastLength - $minOffset
+            || $currentLength >= $lastLength + $minOffset)
         ) {
             return true;
         }

@@ -36,7 +36,7 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
                 $minLengthOfFirstRange,
                 $lengthTileLastRow,
                 $tileMinLength,
-                TilePlannerConstants::DEFAULT_MIN_OFFSET
+                $tileInput->getLayingOptions()->getMinOffset(),
             )
         ) {
             $tile = Tile::create(

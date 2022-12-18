@@ -80,4 +80,9 @@ final class TilePlanInput
     {
         return (int) ceil($this->getRoomDepth() / $this->getTileWidth());
     }
+
+    public function getLayingOptions(): LayingOptions
+    {
+        return $this->layingOptions;
+    }
 }

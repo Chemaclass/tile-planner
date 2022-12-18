@@ -8,6 +8,6 @@ interface OffsetValidatorInterface
         float $currentLength,
         ?float $lastLength,
         float $tileMinLength,
-        float $allowedDifference
+        float $minOffset
     ): bool;
 }

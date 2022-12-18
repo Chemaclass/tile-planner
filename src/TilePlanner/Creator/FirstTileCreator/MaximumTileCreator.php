@@ -62,7 +62,7 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
                 $tileRanges->getMaxOfFirstRange(),
                 $plan->getLastRowLength(),
                 $tileInput->getMinTileLength(),
-                TilePlannerConstants::DEFAULT_MIN_OFFSET
+                $tileInput->getLayingOptions()->getMinOffset()
             )
         ) {
             return true;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Models;
 
 use TilePlanner\Form\TilePlannerType;
+use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class LayingOptions
 {
@@ -13,6 +14,7 @@ final class LayingOptions
         private float $costsPerSquare = 0,
         private string $layingType = TilePlannerType::TYPE_OFFSET,
         private ?float $gapWidth = null,
+        private float $minOffset = TilePlannerConstants::DEFAULT_MIN_OFFSET,
     ) {
     }
 
@@ -34,5 +36,10 @@ final class LayingOptions
     public function getGapWidth(): ?float
     {
         return $this->gapWidth;
+    }
+
+    public function getMinOffset(): float
+    {
+        return $this->minOffset;
     }
 }
