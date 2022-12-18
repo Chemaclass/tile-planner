@@ -66,17 +66,11 @@ final class MaximumTileWithDeviationCreator implements FirstTileCreatorInterface
         TilePlanInput $tileInput,
         LengthRangeBag $tileRanges
     ): bool {
-        if (
-            $this->deviationValidator->isValidDeviation(
-                $tileRanges->getMaxOfFirstRange() - TilePlannerConstants::MIN_DEVIATION,
-                $plan->getLastRowLength(),
-                $tileInput->getMinTileLength(),
-                TilePlannerConstants::MIN_DEVIATION
-            )
-        ) {
-            return true;
-        }
-
-        return false;
+        return $this->deviationValidator->isValidDeviation(
+            $tileRanges->getMaxOfFirstRange() - TilePlannerConstants::MIN_DEVIATION,
+            $plan->getLastRowLength(),
+            $tileInput->getMinTileLength(),
+            TilePlannerConstants::MIN_DEVIATION
+        );
     }
 }
