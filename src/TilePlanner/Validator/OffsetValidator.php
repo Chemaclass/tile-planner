@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Validator;
 
-final class DeviationValidator implements DeviationValidatorInterface
+final class OffsetValidator implements OffsetValidatorInterface
 {
-    public function isValidDeviation(
+    public function isValidOffset(
         float $currentLength,
         ?float $lastLength,
         float $tileMinLength,

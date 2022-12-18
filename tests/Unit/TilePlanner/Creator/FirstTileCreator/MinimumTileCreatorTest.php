@@ -16,7 +16,7 @@ use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 use PHPUnit\Framework\TestCase;
 
 final class MinimumTileCreatorTest extends TestCase
@@ -40,10 +40,10 @@ final class MinimumTileCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(false);
+        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
+        $offsetValidator->method('isValidOffset')->willReturn(false);
 
-        $creator = new MinimumTileCreator($rangeCalculator, $deviationValidator);
+        $creator = new MinimumTileCreator($rangeCalculator, $offsetValidator);
 
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
@@ -61,10 +61,10 @@ final class MinimumTileCreatorTest extends TestCase
             (new LengthRangeBag())
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
-        $deviationValidator = $this->createMock(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(true);
+        $offsetValidator = $this->createMock(OffsetValidatorInterface::class);
+        $offsetValidator->method('isValidOffset')->willReturn(true);
 
-        $creator = new MinimumTileCreator($rangeCalculator, $deviationValidator);
+        $creator = new MinimumTileCreator($rangeCalculator, $offsetValidator);
 
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));

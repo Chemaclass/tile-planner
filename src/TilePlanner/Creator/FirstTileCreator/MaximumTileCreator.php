@@ -12,19 +12,14 @@ use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 
 final class MaximumTileCreator implements FirstTileCreatorInterface
 {
-    private DeviationValidatorInterface $deviationValidator;
-    private TileLengthRangeCreatorInterface $rangeCalculator;
-
     public function __construct(
-        DeviationValidatorInterface $deviationValidator,
-        TileLengthRangeCreatorInterface $rangeCalculator
+        private OffsetValidatorInterface $offsetValidator,
+        private TileLengthRangeCreatorInterface $rangeCalculator
     ) {
-        $this->deviationValidator = $deviationValidator;
-        $this->rangeCalculator = $rangeCalculator;
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
@@ -63,11 +58,11 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         LengthRangeBag $tileRanges
     ): bool {
         if (
-            $this->deviationValidator->isValidDeviation(
+            $this->offsetValidator->isValidOffset(
                 $tileRanges->getMaxOfFirstRange(),
                 $plan->getLastRowLength(),
                 $tileInput->getMinTileLength(),
-                TilePlannerConstants::MIN_DEVIATION
+                TilePlannerConstants::DEFAULT_MIN_OFFSET
             )
         ) {
             return true;

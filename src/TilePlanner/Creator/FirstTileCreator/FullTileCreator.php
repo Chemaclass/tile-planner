@@ -11,23 +11,16 @@ use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class FullTileCreator implements FirstTileCreatorInterface
 {
-    private RangeValidatorInterface $rangeValidator;
-    private DeviationValidatorInterface $deviationValidator;
-    private TileLengthRangeCreatorInterface $rangeCalculator;
-
     public function __construct(
-        RangeValidatorInterface $rangeValidator,
-        DeviationValidatorInterface $deviationValidator,
-        TileLengthRangeCreatorInterface $rangeCalculator
+        private RangeValidatorInterface $rangeValidator,
+        private OffsetValidatorInterface $offsetValidator,
+        private TileLengthRangeCreatorInterface $rangeCalculator
     ) {
-        $this->rangeValidator = $rangeValidator;
-        $this->deviationValidator = $deviationValidator;
-        $this->rangeCalculator = $rangeCalculator;
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
@@ -39,11 +32,11 @@ final class FullTileCreator implements FirstTileCreatorInterface
         $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
 
         if (
-            $this->deviationValidator->isValidDeviation(
+            $this->offsetValidator->isValidOffset(
                 $tileLength,
                 $lengthTileLastRow,
                 $tileMinLength,
-                TilePlannerConstants::MIN_DEVIATION
+                TilePlannerConstants::DEFAULT_MIN_OFFSET
             )
             && $this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())
         ) {

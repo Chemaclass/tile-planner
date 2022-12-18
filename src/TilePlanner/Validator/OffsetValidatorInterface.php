@@ -2,9 +2,9 @@
 
 namespace TilePlanner\TilePlanner\Validator;
 
-interface DeviationValidatorInterface
+interface OffsetValidatorInterface
 {
-    public function isValidDeviation(
+    public function isValidOffset(
         float $currentLength,
         ?float $lastLength,
         float $tileMinLength,

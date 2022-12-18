@@ -14,7 +14,7 @@ use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class FullTileCreatorTest extends TestCase
@@ -35,13 +35,13 @@ final class FullTileCreatorTest extends TestCase
         $rangeValidator = $this->createMock(RangeValidatorInterface::class);
         $rangeValidator->method('isInRange')->willReturn(true);
 
-        $deviationValidator = $this->createMock(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(true);
+        $offsetValidator = $this->createMock(OffsetValidatorInterface::class);
+        $offsetValidator->method('isValidOffset')->willReturn(true);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(new LengthRangeBag());
 
-        $creator = new FullTileCreator($rangeValidator, $deviationValidator, $rangeCreator);
+        $creator = new FullTileCreator($rangeValidator, $offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();
@@ -51,17 +51,17 @@ final class FullTileCreatorTest extends TestCase
         self::assertEquals(50, $actualTile->getLength());
     }
 
-    public function test_create_returns_null_when_deviation_is_not_valid(): void
+    public function test_create_returns_null_when_offset_is_not_valid(): void
     {
         $rangeValidator = $this->createStub(RangeValidatorInterface::class);
 
-        $deviationValidator = $this->createMock(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(false);
+        $offsetValidator = $this->createMock(OffsetValidatorInterface::class);
+        $offsetValidator->method('isValidOffset')->willReturn(false);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(new LengthRangeBag());
 
-        $creator = new FullTileCreator($rangeValidator, $deviationValidator, $rangeCreator);
+        $creator = new FullTileCreator($rangeValidator, $offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();
@@ -76,12 +76,12 @@ final class FullTileCreatorTest extends TestCase
         $rangeValidator = $this->createMock(RangeValidatorInterface::class);
         $rangeValidator->method('isInRange')->willReturn(false);
 
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
+        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(new LengthRangeBag());
 
-        $creator = new FullTileCreator($rangeValidator, $deviationValidator, $rangeCreator);
+        $creator = new FullTileCreator($rangeValidator, $offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();

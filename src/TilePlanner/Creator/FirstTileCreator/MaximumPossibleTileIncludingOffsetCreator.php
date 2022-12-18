@@ -12,19 +12,14 @@ use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 
-final class MaximumTileWithDeviationCreator implements FirstTileCreatorInterface
+final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreatorInterface
 {
-    private DeviationValidatorInterface $deviationValidator;
-    private TileLengthRangeCreatorInterface $rangeCalculator;
-
     public function __construct(
-        DeviationValidatorInterface $deviationValidator,
-        TileLengthRangeCreatorInterface $rangeCalculator
+        private OffsetValidatorInterface $offsetValidator,
+        private TileLengthRangeCreatorInterface $rangeCalculator
     ) {
-        $this->deviationValidator = $deviationValidator;
-        $this->rangeCalculator = $rangeCalculator;
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
@@ -42,11 +37,11 @@ final class MaximumTileWithDeviationCreator implements FirstTileCreatorInterface
         if ($this->canUseMaxLengthOfFirstRange($plan, $tileInput, $tileRanges)) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
-                $maxLengthOfFirstRange - TilePlannerConstants::MIN_DEVIATION,
+                $maxLengthOfFirstRange - TilePlannerConstants::DEFAULT_MIN_OFFSET,
                 TileCounter::next()
             );
 
-            $restOfTile = $tileLength - ($maxLengthOfFirstRange - TilePlannerConstants::MIN_DEVIATION);
+            $restOfTile = $tileLength - ($maxLengthOfFirstRange - TilePlannerConstants::DEFAULT_MIN_OFFSET);
 
             $rests->addRest(
                 $restOfTile,
@@ -66,11 +61,11 @@ final class MaximumTileWithDeviationCreator implements FirstTileCreatorInterface
         TilePlanInput $tileInput,
         LengthRangeBag $tileRanges
     ): bool {
-        return $this->deviationValidator->isValidDeviation(
-            $tileRanges->getMaxOfFirstRange() - TilePlannerConstants::MIN_DEVIATION,
+        return $this->offsetValidator->isValidOffset(
+            $tileRanges->getMaxOfFirstRange() - TilePlannerConstants::DEFAULT_MIN_OFFSET,
             $plan->getLastRowLength(),
             $tileInput->getMinTileLength(),
-            TilePlannerConstants::MIN_DEVIATION
+            TilePlannerConstants::DEFAULT_MIN_OFFSET
         );
     }
 }

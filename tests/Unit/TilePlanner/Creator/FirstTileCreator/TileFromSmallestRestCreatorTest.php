@@ -20,7 +20,7 @@ use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromSmallestRestCreatorTest extends TestCase
@@ -147,8 +147,8 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         $rangeValidator = $this->createMock(RangeValidatorInterface::class);
         $rangeValidator->method('isInRange')->willReturn(true);
 
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(true);
+        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
+        $offsetValidator->method('isValidOffset')->willReturn(true);
 
         $rangeCreator = $this->createStub(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(
@@ -156,7 +156,7 @@ final class TileFromSmallestRestCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new TileFromMatchingRestCreator($rangeValidator, $deviationValidator, $rangeCreator);
+        $creator = new TileFromMatchingRestCreator($rangeValidator, $offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();

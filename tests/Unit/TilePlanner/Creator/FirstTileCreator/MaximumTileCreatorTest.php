@@ -15,7 +15,7 @@ use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 
 final class MaximumTileCreatorTest extends TestCase
 {
@@ -32,7 +32,7 @@ final class MaximumTileCreatorTest extends TestCase
 
     public function test_create_returns_null_if_length_is_in_range(): void
     {
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
+        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(
@@ -40,7 +40,7 @@ final class MaximumTileCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new MaximumTileCreator($deviationValidator, $rangeCreator);
+        $creator = new MaximumTileCreator($offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();
@@ -50,9 +50,9 @@ final class MaximumTileCreatorTest extends TestCase
         self::assertNull($actualTile);
     }
 
-    public function test_create_returns_null_if_length_is_not_in_range_and_deviation_not_valid(): void
+    public function test_create_returns_null_if_length_is_not_in_range_and_offset_not_valid(): void
     {
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
+        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(
@@ -60,7 +60,7 @@ final class MaximumTileCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new MaximumTileCreator($deviationValidator, $rangeCreator);
+        $creator = new MaximumTileCreator($offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();
@@ -72,8 +72,8 @@ final class MaximumTileCreatorTest extends TestCase
 
     public function test_create_returns_max_of_first_range_if_tile_length_is_not_in_range(): void
     {
-        $deviationValidator = $this->createStub(DeviationValidatorInterface::class);
-        $deviationValidator->method('isValidDeviation')->willReturn(true);
+        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
+        $offsetValidator->method('isValidOffset')->willReturn(true);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(
@@ -81,7 +81,7 @@ final class MaximumTileCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new MaximumTileCreator($deviationValidator, $rangeCreator);
+        $creator = new MaximumTileCreator($offsetValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();

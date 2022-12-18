@@ -24,9 +24,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
     {
-        $tileWidthWithDeviation = $this->calculateTileWithDeviation($plan, $tileInput, $rests);
+        $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $rests);
 
-        if ($tileWidthWithDeviation === null) {
+        if ($tileWidthIncludingOffset === null) {
             return null;
         }
 
@@ -34,7 +34,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             ->smallestRestFinder
             ->findSmallestRestWithMinLength(
                 TilePlannerConstants::RESTS_LEFT,
-                $tileWidthWithDeviation
+                $tileWidthIncludingOffset
             );
 
         if ($smallestRest === null) {
@@ -42,17 +42,17 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         }
 
         $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
-        $trash = $smallestRest->getLength() - $tileWidthWithDeviation;
+        $trash = $smallestRest->getLength() - $tileWidthIncludingOffset;
         $rests->addThrash($trash);
 
         return Tile::create(
             $tileInput->getTileWidth(),
-            $tileWidthWithDeviation,
+            $tileWidthIncludingOffset,
             $smallestRest->getNumber(),
         );
     }
 
-    private function calculateTileWithDeviation(
+    private function calculateTileWithOffset(
         TilePlan $plan,
         TilePlanInput $tileInput,
         Rests $rests
@@ -60,9 +60,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         $lengthTileLastRow = $plan->getLastRowLength();
         $ranges = $this->rangeCalculator->calculateRanges($tileInput)->getRanges();
 
-        $tileWidthWithDeviation = $lengthTileLastRow - TilePlannerConstants::MIN_DEVIATION;
+        $tileWidthIncludingOffset = $lengthTileLastRow - TilePlannerConstants::DEFAULT_MIN_OFFSET;
 
-        if (!$this->rangeValidator->isInRange($tileWidthWithDeviation, $ranges)) {
+        if (!$this->rangeValidator->isInRange($tileWidthIncludingOffset, $ranges)) {
             return null;
         }
 
@@ -72,6 +72,6 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             return null;
         }
 
-        return $tileWidthWithDeviation;
+        return $tileWidthIncludingOffset;
     }
 }

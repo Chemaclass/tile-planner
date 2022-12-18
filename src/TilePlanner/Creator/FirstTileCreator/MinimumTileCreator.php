@@ -11,20 +11,14 @@ use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 
 final class MinimumTileCreator implements FirstTileCreatorInterface
 {
-    private TileLengthRangeCreatorInterface $rangeCalculator;
-
-    private DeviationValidatorInterface $deviationValidator;
-
     public function __construct(
-        TileLengthRangeCreatorInterface $rangeCalculator,
-        DeviationValidatorInterface $deviationValidator
+        private TileLengthRangeCreatorInterface $rangeCalculator,
+        private OffsetValidatorInterface $offsetValidator
     ) {
-        $this->rangeCalculator = $rangeCalculator;
-        $this->deviationValidator = $deviationValidator;
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
@@ -38,11 +32,11 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
         $minLengthOfFirstRange = $tileRanges->getMinOfFirstRange();
 
         if (
-            $this->deviationValidator->isValidDeviation(
+            $this->offsetValidator->isValidOffset(
                 $minLengthOfFirstRange,
                 $lengthTileLastRow,
                 $tileMinLength,
-                TilePlannerConstants::MIN_DEVIATION
+                TilePlannerConstants::DEFAULT_MIN_OFFSET
             )
         ) {
             $tile = Tile::create(
