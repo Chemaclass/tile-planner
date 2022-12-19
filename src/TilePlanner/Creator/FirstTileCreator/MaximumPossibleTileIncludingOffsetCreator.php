@@ -14,7 +14,7 @@ use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 
-final class MaximumTileCreator implements FirstTileCreatorInterface
+final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreatorInterface
 {
     public function __construct(
         private OffsetValidatorInterface $offsetValidator,
@@ -30,14 +30,18 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
         $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
 
+        if ($plan->getRowsCount() === 0) {
+            return null;
+        }
+
         if ($this->canUseMaxLengthOfFirstRange($plan, $tileInput, $tileRanges)) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
-                $maxLengthOfFirstRange,
+                $maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset(),
                 TileCounter::next()
             );
 
-            $restOfTile = $tileLength - $maxLengthOfFirstRange;
+            $restOfTile = $tileLength - ($maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset());
 
             $rests->addRest(
                 $restOfTile,
@@ -57,17 +61,11 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         TilePlanInput $tileInput,
         LengthRangeBag $tileRanges
     ): bool {
-        if (
-            $this->offsetValidator->isValidOffset(
-                $tileRanges->getMaxOfFirstRange(),
-                $plan->getLastRowLength(),
-                $tileInput->getMinTileLength(),
-                $tileInput->getLayingOptions()->getMinOffset()
-            )
-        ) {
-            return true;
-        }
-
-        return false;
+        return $this->offsetValidator->isValidOffset(
+            $tileRanges->getMaxOfFirstRange() - $tileInput->getLayingOptions()->getMinOffset(),
+            $plan->getLastRowLength(),
+            $tileInput->getMinTileLength(),
+            $tileInput->getLayingOptions()->getMinOffset()
+        );
     }
 }

@@ -25,7 +25,7 @@ final class TilePlanCreator
     public function create(TilePlanInput $tileInput): TilePlan
     {
         $plan = new TilePlan();
-        $totalRows = $this->getTotalRows($tileInput);
+        $totalRows = $tileInput->getTotalRows();
 
         for ($i = 1; $i <= $totalRows; ++$i) {
             $row = $this->creator->createRow(
@@ -52,11 +52,6 @@ final class TilePlanCreator
         $plan->setTotalRest($this->rests->sumOfAll());
 
         return $plan;
-    }
-
-    private function getTotalRows(TilePlanInput $input): int
-    {
-        return (int) ceil($input->getRoomDepth() / $input->getTileWidth());
     }
 
     private function mergeTiles(array $tiles): array

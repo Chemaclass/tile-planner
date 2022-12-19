@@ -6,8 +6,5 @@ use TilePlanner\TilePlanner\Models\Rest;
 
 interface SmallestRestFinderInterface
 {
-    /**
-     * @param list<Rest> $rests
-     */
-    public function findSmallestRest(array $rests): ?Rest;
+    public function findSmallestRestWithMinLength(string $side, float $minWidth): ?Rest;
 }

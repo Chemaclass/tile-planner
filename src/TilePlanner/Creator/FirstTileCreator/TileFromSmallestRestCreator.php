@@ -11,58 +11,67 @@ use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private DeviationValidatorInterface $deviationValidator,
         private TileLengthRangeCreatorInterface $rangeCalculator,
         private SmallestRestFinderInterface $smallestRestFinder,
+        private RangeValidatorInterface $rangeValidator,
     ) {
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
     {
-        $tileMinLength = $tileInput->getMinTileLength();
-        $lengthTileLastRow = $plan->getLastRowLength();
-        $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
+        $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $rests);
 
-        if (!$rests->hasRest(TilePlannerConstants::RESTS_LEFT)) {
+        if ($tileWidthIncludingOffset === null) {
             return null;
         }
 
-        $smallestRest = $this->smallestRestFinder
-            ->findSmallestRest($rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        $smallestRest = $this
+            ->smallestRestFinder
+            ->findSmallestRestWithMinLength(
+                TilePlannerConstants::RESTS_LEFT,
+                $tileWidthIncludingOffset
+            );
 
         if ($smallestRest === null) {
             return null;
         }
 
-        $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
+        $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
+        $trash = $smallestRest->getLength() - $tileWidthIncludingOffset;
+        $rests->addThrash($trash);
 
-        if (
-            $maxLengthOfFirstRange <= $smallestRest->getLength()
-            && $this->deviationValidator->isValidDeviation(
-                $maxLengthOfFirstRange,
-                $lengthTileLastRow,
-                $tileMinLength,
-                TilePlannerConstants::MIN_DEVIATION
-            )
-        ) {
-            $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
+        return Tile::create(
+            $tileInput->getTileWidth(),
+            $tileWidthIncludingOffset,
+            $smallestRest->getNumber(),
+        );
+    }
 
-            $trash = $smallestRest->getLength() - $maxLengthOfFirstRange;
+    private function calculateTileWithOffset(
+        TilePlan $plan,
+        TilePlanInput $tileInput,
+        Rests $rests
+    ): ?float {
+        $lengthTileLastRow = $plan->getLastRowLength();
+        $ranges = $this->rangeCalculator->calculateRanges($tileInput)->getRanges();
 
-            $rests->addThrash($trash);
+        $tileWidthIncludingOffset = $lengthTileLastRow - $tileInput->getLayingOptions()->getMinOffset();
 
-            return Tile::create(
-                $tileInput->getTileWidth(),
-                $maxLengthOfFirstRange,
-                $smallestRest->getNumber(),
-            );
+        if (!$this->rangeValidator->isInRange($tileWidthIncludingOffset, $ranges)) {
+            return null;
         }
 
-        return null;
+        $remainingRows = $tileInput->getTotalRows() - $plan->getRowsCount();
+
+        if (count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
+            return null;
+        }
+
+        return $tileWidthIncludingOffset;
     }
 }

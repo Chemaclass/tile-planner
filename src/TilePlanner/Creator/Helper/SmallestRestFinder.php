@@ -5,24 +5,31 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\Helper;
 
 use TilePlanner\TilePlanner\Models\Rest;
+use TilePlanner\TilePlanner\Models\Rests;
 
 final class SmallestRestFinder implements SmallestRestFinderInterface
 {
-    /**
-     * @param list<Rest> $rests
-     */
-    public function findSmallestRest(array $rests): ?Rest
+    public function __construct(
+        private Rests $rests
+    ) {
+    }
+
+    public function findSmallestRestWithMinLength(string $side, float $minWidth): ?Rest
     {
-        if (empty($rests)) {
+        $restsForSide = $this->rests->getRests($side);
+
+        if (empty($restsForSide)) {
             return null;
         }
 
-        if (count($rests) === 1) {
-            return current($rests);
+        usort($restsForSide, static fn(Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
+
+        foreach ($restsForSide as $rest) {
+            if ($rest->getLength() >= $minWidth) {
+                return $rest;
+            }
         }
 
-        usort($rests, static fn(Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
-
-        return reset($rests);
+        return null;
     }
 }

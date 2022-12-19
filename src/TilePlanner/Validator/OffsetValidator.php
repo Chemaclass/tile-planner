@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Validator;
 
-final class DeviationValidator implements DeviationValidatorInterface
+final class OffsetValidator implements OffsetValidatorInterface
 {
-    public function isValidDeviation(
+    public function isValidOffset(
         float $currentLength,
         ?float $lastLength,
         float $tileMinLength,
-        float $allowedDifference
+        float $minOffset
     ): bool {
         if (null === $lastLength && $currentLength >= $tileMinLength) {
             return true;
@@ -18,8 +18,8 @@ final class DeviationValidator implements DeviationValidatorInterface
 
         if (
             $currentLength >= $tileMinLength
-            && ($currentLength <= $lastLength - $allowedDifference
-            || $currentLength >= $lastLength + $allowedDifference)
+            && ($currentLength <= $lastLength - $minOffset
+            || $currentLength >= $lastLength + $minOffset)
         ) {
             return true;
         }

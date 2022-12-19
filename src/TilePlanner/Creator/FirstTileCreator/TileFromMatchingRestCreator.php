@@ -11,14 +11,14 @@ use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\DeviationValidatorInterface;
+use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
 use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
 
 final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
 {
     public function __construct(
         private RangeValidatorInterface $rangeValidator,
-        private DeviationValidatorInterface $deviationValidator,
+        private OffsetValidatorInterface $offsetValidator,
         private TileLengthRangeCreatorInterface $rangeCalculator,
     ) {
     }
@@ -69,11 +69,11 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
             }
 
             if (
-                $this->deviationValidator->isValidDeviation(
+                $this->offsetValidator->isValidOffset(
                     $restLength,
                     $lengthTileLastRow,
                     $tileMinLength,
-                    TilePlannerConstants::MIN_DEVIATION
+                    $tileInput->getLayingOptions()->getMinOffset(),
                 )
             ) {
                 return $rest;
