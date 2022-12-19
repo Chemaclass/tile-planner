@@ -31,7 +31,8 @@ final class FullTileCreator implements FirstTileCreatorInterface
         $lengthTileLastRow = $plan->getLastRowLength();
         $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
 
-        if ($this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())
+        if (
+            $this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())
             && $this->offsetValidator->isValidOffset(
                 $tileLength,
                 $lengthTileLastRow,
