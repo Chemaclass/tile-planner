@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Validator;
 
-use TilePlanner\TilePlanner\Models\LengthRange;
-use TilePlanner\TilePlanner\Validator\RangeValidator;
 use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner\Models\LengthRange;
+use TilePlanner\TilePlanner\Validator\Models\RangeValidator;
 
 final class RangeValidatorTest extends TestCase
 {

@@ -15,7 +15,7 @@ use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class ChessTileCreatorTest extends TestCase
 {
@@ -32,13 +32,13 @@ final class ChessTileCreatorTest extends TestCase
 
     public function test_create_tile_with_full_with_if_length_is_in_range(): void
     {
-        $validator = $this->createMock(RangeValidatorInterface::class);
-        $validator->method('isInRange')->willReturn(true);
+        $tileValidator = $this->createMock(TileValidatorInterface::class);
+        $tileValidator->method('isValid')->willReturn(true);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(new LengthRangeBag());
 
-        $creator = new ChessTileCreator($validator, $rangeCreator);
+        $creator = new ChessTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();
@@ -51,8 +51,8 @@ final class ChessTileCreatorTest extends TestCase
 
     public function test_create_tile_with_min_with_and_rest_if_length_is_not_in_range(): void
     {
-        $validator = $this->createMock(RangeValidatorInterface::class);
-        $validator->method('isInRange')->willReturn(false);
+        $tileValidator = $this->createMock(TileValidatorInterface::class);
+        $tileValidator->method('isValid')->willReturn(false);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(
@@ -60,7 +60,7 @@ final class ChessTileCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new ChessTileCreator($validator, $rangeCreator);
+        $creator = new ChessTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
         $rests = new Rests();

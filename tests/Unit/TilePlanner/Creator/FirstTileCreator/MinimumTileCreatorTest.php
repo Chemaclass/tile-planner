@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\Form\TilePlannerType;
+use PHPUnit\Framework\TestCase;
 use TilePlanner\TilePlanner\Creator\FirstTileCreator\MinimumTileCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\LayingOptions;
-use TilePlanner\TilePlanner\Models\Room;
-use TilePlanner\TilePlanner\Models\TilePlan;
-use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
-use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
-use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class MinimumTileCreatorTest extends TestCase
 {
@@ -40,10 +39,10 @@ final class MinimumTileCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
-        $offsetValidator->method('isValidOffset')->willReturn(false);
+        $tileValidator = $this->createStub(TileValidatorInterface::class);
+        $tileValidator->method('isValid')->willReturn(false);
 
-        $creator = new MinimumTileCreator($rangeCalculator, $offsetValidator);
+        $creator = new MinimumTileCreator($tileValidator, $rangeCalculator);
 
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
@@ -61,10 +60,10 @@ final class MinimumTileCreatorTest extends TestCase
             (new LengthRangeBag())
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
-        $offsetValidator = $this->createMock(OffsetValidatorInterface::class);
-        $offsetValidator->method('isValidOffset')->willReturn(true);
+        $tileValidator = $this->createMock(TileValidatorInterface::class);
+        $tileValidator->method('isValid')->willReturn(true);
 
-        $creator = new MinimumTileCreator($rangeCalculator, $offsetValidator);
+        $creator = new MinimumTileCreator($tileValidator, $rangeCalculator);
 
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));

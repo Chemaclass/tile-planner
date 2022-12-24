@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinderInterface;
-use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private TileLengthRangeCreatorInterface $rangeCalculator,
+        private TileValidatorInterface $tileValidator,
         private SmallestRestFinderInterface $smallestRestFinder,
-        private RangeValidatorInterface $rangeValidator,
     ) {
     }
 
@@ -58,11 +56,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         Rests $rests
     ): ?float {
         $lengthTileLastRow = $plan->getLastRowLength();
-        $ranges = $this->rangeCalculator->calculateRanges($tileInput)->getRanges();
-
         $tileWidthIncludingOffset = $lengthTileLastRow - $tileInput->getLayingOptions()->getMinOffset();
 
-        if (!$this->rangeValidator->isInRange($tileWidthIncludingOffset, $ranges)) {
+        if (!$this->tileValidator->isValid($tileWidthIncludingOffset, $tileInput, $plan)) {
             return null;
         }
 
@@ -71,6 +67,8 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
         if (count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
             return null;
         }
+
+        dump($tileWidthIncludingOffset . " is OK " . get_class($this) . PHP_EOL);
 
         return $tileWidthIncludingOffset;
     }

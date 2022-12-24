@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Validator;
 
-use TilePlanner\TilePlanner\Validator\OffsetValidator;
 use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner\Validator\Models\OffsetValidator;
 
 final class DeviationValidatorTest extends TestCase
 {
