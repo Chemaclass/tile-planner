@@ -23,9 +23,6 @@ final class FullTileCreator implements FirstTileCreatorInterface
         $tileLength = $tileInput->getTileLength();
 
         if ($this->tileValidator->isValid($tileLength, $tileInput, $plan)) {
-
-            dump($tileLength . " is OK " . get_class($this) . PHP_EOL);
-
             return Tile::create(
                 $tileInput->getTileWidth(),
                 $tileLength,

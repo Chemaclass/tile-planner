@@ -58,8 +58,6 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
             }
 
             if ($this->tileValidator->isValid($restLength, $tileInput, $plan)) {
-                dump($restLength . " is OK " . get_class($this) . PHP_EOL);
-
                 return $rest;
             }
         }

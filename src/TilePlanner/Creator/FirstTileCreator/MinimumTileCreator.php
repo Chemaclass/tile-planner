@@ -28,8 +28,6 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
 
         if ($this->tileValidator->isValid($minLengthOfFirstRange, $tileInput, $plan)) {
 
-            dump($minLengthOfFirstRange . " is OK " . get_class($this) . PHP_EOL);
-
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
                 $minLengthOfFirstRange,

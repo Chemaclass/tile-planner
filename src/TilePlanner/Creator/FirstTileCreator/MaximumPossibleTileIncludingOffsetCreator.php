@@ -36,9 +36,6 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
         }
 
         if ($this->tileValidator->isValid($maxLengthOfFirstRangeWithOffset, $tileInput, $plan)) {
-
-            dump($maxLengthOfFirstRangeWithOffset . " is OK " . get_class($this) . PHP_EOL);
-
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
                 $maxLengthOfFirstRangeWithOffset,
@@ -56,8 +53,6 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
 
             return $tile;
         }
-
-        dump($maxLengthOfFirstRangeWithOffset . " is NOT OK " . get_class($this) . PHP_EOL);
 
         return null;
     }

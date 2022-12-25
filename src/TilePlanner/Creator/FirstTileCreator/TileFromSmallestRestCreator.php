@@ -68,7 +68,6 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             return null;
         }
 
-        dump($tileWidthIncludingOffset . " is OK " . get_class($this) . PHP_EOL);
 
         return $tileWidthIncludingOffset;
     }
