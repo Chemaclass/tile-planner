@@ -207,7 +207,7 @@ final class TilePlannerFactory extends AbstractFactory
             [
                 $this->createMinLengthValidator(),
                 $this->createRangeValidator(),
-                $this->createOffsetValidator()
+                $this->createOffsetValidator(),
             ]
         );
     }

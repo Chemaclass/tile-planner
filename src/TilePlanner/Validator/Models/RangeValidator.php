@@ -10,7 +10,8 @@ use TilePlanner\TilePlanner\Models\TilePlanInput;
 
 final class RangeValidator implements ValidatorInterface
 {
-    public function __construct(private TileLengthRangeCreatorInterface $rangeCreator) {
+    public function __construct(private TileLengthRangeCreatorInterface $rangeCreator)
+    {
     }
 
     public function isValid(float $tileLength, TilePlanInput $tileInput, TilePlan $plan): bool

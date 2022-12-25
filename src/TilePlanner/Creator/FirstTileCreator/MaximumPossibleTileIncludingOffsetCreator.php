@@ -31,7 +31,7 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
 
         $maxLengthOfFirstRangeWithOffset = $maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset();
 
-        if ($plan->getRowsCount() === 0) {
+        if (0 === $plan->getRowsCount()) {
             return null;
         }
 

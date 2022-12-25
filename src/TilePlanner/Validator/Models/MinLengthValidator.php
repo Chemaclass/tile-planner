@@ -11,7 +11,6 @@ final class MinLengthValidator implements ValidatorInterface
 {
     public function isValid(float $tileLength, TilePlanInput $tileInput, TilePlan $plan): bool
     {
-
         if ($tileLength < $tileInput->getMinTileLength()) {
             return false;
         }

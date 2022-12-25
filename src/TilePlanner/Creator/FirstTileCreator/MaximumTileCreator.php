@@ -30,7 +30,6 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
 
         if ($this->tileValidator->isValid($maxLengthOfFirstRange, $tileInput, $plan)) {
-
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
                 $maxLengthOfFirstRange,

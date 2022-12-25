@@ -22,7 +22,7 @@ final class SmallestRestFinder implements SmallestRestFinderInterface
             return null;
         }
 
-        usort($restsForSide, static fn(Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
+        usort($restsForSide, static fn (Rest $a, Rest $b) => $a->getLength() <=> $b->getLength());
 
         foreach ($restsForSide as $rest) {
             if ($rest->getLength() >= $minWidth) {

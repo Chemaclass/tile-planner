@@ -31,7 +31,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
             $tileInput
         );
 
-        if ($matchingRest !== null) {
+        if (null !== $matchingRest) {
             $rests->removeRest($matchingRest->getLength(), TilePlannerConstants::RESTS_LEFT);
 
             return Tile::create(
@@ -49,7 +49,6 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
         TilePlan $plan,
         TilePlanInput $tileInput
     ): ?Rest {
-
         foreach ($rests->getRests(TilePlannerConstants::RESTS_LEFT) as $rest) {
             $restLength = $rest->getLength();
 

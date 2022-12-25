@@ -13,7 +13,8 @@ final class TileValidator implements TileValidatorInterface
     /**
      * @param list<ValidatorInterface> $tileValidatorStack
      */
-    public function __construct(private array $tileValidatorStack) {
+    public function __construct(private array $tileValidatorStack)
+    {
     }
 
     public function isValid(float $tileLength, TilePlanInput $tileInput, TilePlan $plan): bool

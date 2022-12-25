@@ -24,7 +24,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
     {
         $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $rests);
 
-        if ($tileWidthIncludingOffset === null) {
+        if (null === $tileWidthIncludingOffset) {
             return null;
         }
 
@@ -33,9 +33,10 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             ->findSmallestRestWithMinLength(
                 TilePlannerConstants::RESTS_LEFT,
                 $tileWidthIncludingOffset
-            );
+            )
+        ;
 
-        if ($smallestRest === null) {
+        if (null === $smallestRest) {
             return null;
         }
 
@@ -64,10 +65,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 
         $remainingRows = $tileInput->getTotalRows() - $plan->getRowsCount();
 
-        if (count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
+        if (\count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
             return null;
         }
-
 
         return $tileWidthIncludingOffset;
     }

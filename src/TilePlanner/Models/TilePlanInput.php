@@ -66,16 +66,6 @@ final class TilePlanInput
         return $this->layingOptions->getCostsPerSquare();
     }
 
-    private function getTotalHorizontalGaps(): int
-    {
-        return (int) floor($this->room->getWidth() / $this->tile->getLength());
-    }
-
-    private function getTotalVerticalGaps(): int
-    {
-        return (int) floor($this->room->getDepth() / $this->tile->getWidth());
-    }
-
     public function getTotalRows(): int
     {
         return (int) ceil($this->getRoomDepth() / $this->getTileWidth());
@@ -84,5 +74,15 @@ final class TilePlanInput
     public function getLayingOptions(): LayingOptions
     {
         return $this->layingOptions;
+    }
+
+    private function getTotalHorizontalGaps(): int
+    {
+        return (int) floor($this->room->getWidth() / $this->tile->getLength());
+    }
+
+    private function getTotalVerticalGaps(): int
+    {
+        return (int) floor($this->room->getDepth() / $this->tile->getWidth());
     }
 }

@@ -27,7 +27,6 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
         $minLengthOfFirstRange = $tileRanges->getMinOfFirstRange();
 
         if ($this->tileValidator->isValid($minLengthOfFirstRange, $tileInput, $plan)) {
-
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
                 $minLengthOfFirstRange,
