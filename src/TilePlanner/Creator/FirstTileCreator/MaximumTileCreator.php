@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class MaximumTileCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private OffsetValidatorInterface $offsetValidator,
-        private TileLengthRangeCreatorInterface $rangeCalculator
+        private TileValidatorInterface $tileValidator,
+        private TileLengthRangeCreatorInterface $rangeCreator,
     ) {
     }
 
@@ -27,10 +26,10 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         $tileMinLength = $tileInput->getMinTileLength();
         $tileLength = $tileInput->getTileLength();
 
-        $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
+        $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
         $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
 
-        if ($this->canUseMaxLengthOfFirstRange($plan, $tileInput, $tileRanges)) {
+        if ($this->tileValidator->isValid($maxLengthOfFirstRange, $tileInput, $plan)) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
                 $maxLengthOfFirstRange,
@@ -50,24 +49,5 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
         }
 
         return null;
-    }
-
-    private function canUseMaxLengthOfFirstRange(
-        TilePlan $plan,
-        TilePlanInput $tileInput,
-        LengthRangeBag $tileRanges
-    ): bool {
-        if (
-            $this->offsetValidator->isValidOffset(
-                $tileRanges->getMaxOfFirstRange(),
-                $plan->getLastRowLength(),
-                $tileInput->getMinTileLength(),
-                $tileInput->getLayingOptions()->getMinOffset()
-            )
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }

@@ -4,40 +4,74 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Validator;
 
-use TilePlanner\TilePlanner\Models\LengthRange;
-use TilePlanner\TilePlanner\Validator\RangeValidator;
 use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
+use TilePlanner\TilePlanner\Models\LayingOptions;
+use TilePlanner\TilePlanner\Models\LengthRange;
+use TilePlanner\TilePlanner\Models\LengthRangeBag;
+use TilePlanner\TilePlanner\Models\Room;
+use TilePlanner\TilePlanner\Models\Tile;
+use TilePlanner\TilePlanner\Models\TilePlan;
+use TilePlanner\TilePlanner\Models\TilePlanInput;
+use TilePlanner\TilePlanner\Validator\Models\RangeValidator;
 
 final class RangeValidatorTest extends TestCase
 {
-    public function test_range_not_valid_without_length_ranges(): void
+    public function test_range_not_valid_when_not_in_range(): void
     {
-        $validator = new RangeValidator();
+        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
+        $rangeCreator->method('calculateRanges')->willReturn(
+            (new LengthRangeBag())->addRange(
+                LengthRange::withMinAndMax(30, 80)
+            )
+        );
 
-        $actual = $validator->isInRange(10, []);
+        $validator = new RangeValidator($rangeCreator);
+
+        $currentLength = 90;
+        $plan = new TilePlan();
+
+        $input = new TilePlanInput(
+            Room::create(200, 300),
+            Tile::create(20, 100),
+            new LayingOptions(30)
+        );
+
+        $actual = $validator->isValid(
+            $currentLength,
+            $input,
+            $plan,
+        );
 
         self::assertFalse($actual);
     }
 
-    public function test_range_returns_true_if_in_range(): void
+    public function test_range_valid_when_in_range(): void
     {
-        $validator = new RangeValidator();
+        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
+        $rangeCreator->method('calculateRanges')->willReturn(
+            (new LengthRangeBag())->addRange(
+                LengthRange::withMinAndMax(30, 80)
+            )
+        );
 
-        $lengthRange = LengthRange::withMinAndMax(10, 20);
+        $validator = new RangeValidator($rangeCreator);
 
-        $actual = $validator->isInRange(10, [$lengthRange]);
+        $currentLength = 60;
+        $plan = new TilePlan();
+
+        $input = new TilePlanInput(
+            Room::create(200, 300),
+            Tile::create(20, 100),
+            new LayingOptions(30)
+        );
+
+        $actual = $validator->isValid(
+            $currentLength,
+            $input,
+            $plan,
+        );
 
         self::assertTrue($actual);
-    }
-
-    public function test_range_returns_false_if_in_range(): void
-    {
-        $validator = new RangeValidator();
-
-        $lengthRange = LengthRange::withMinAndMax(15, 20);
-
-        $actual = $validator->isInRange(10, [$lengthRange]);
-
-        self::assertFalse($actual);
     }
 }

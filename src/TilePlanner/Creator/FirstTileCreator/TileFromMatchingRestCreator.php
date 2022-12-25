@@ -4,22 +4,18 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
-use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\Rest;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
-use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private RangeValidatorInterface $rangeValidator,
-        private OffsetValidatorInterface $offsetValidator,
-        private TileLengthRangeCreatorInterface $rangeCalculator,
+        private TileValidatorInterface $tileValidator,
     ) {
     }
 
@@ -35,7 +31,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
             $tileInput
         );
 
-        if ($matchingRest !== null) {
+        if (null !== $matchingRest) {
             $rests->removeRest($matchingRest->getLength(), TilePlannerConstants::RESTS_LEFT);
 
             return Tile::create(
@@ -53,10 +49,6 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
         TilePlan $plan,
         TilePlanInput $tileInput
     ): ?Rest {
-        $lengthTileLastRow = $plan->getLastRowLength();
-        $tileMinLength = $tileInput->getMinTileLength();
-        $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
-
         foreach ($rests->getRests(TilePlannerConstants::RESTS_LEFT) as $rest) {
             $restLength = $rest->getLength();
 
@@ -64,18 +56,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
                 continue;
             }
 
-            if (!$this->rangeValidator->isInRange($restLength, $tileRanges->getRanges())) {
-                continue;
-            }
-
-            if (
-                $this->offsetValidator->isValidOffset(
-                    $restLength,
-                    $lengthTileLastRow,
-                    $tileMinLength,
-                    $tileInput->getLayingOptions()->getMinOffset(),
-                )
-            ) {
+            if ($this->tileValidator->isValid($restLength, $tileInput, $plan)) {
                 return $rest;
             }
         }

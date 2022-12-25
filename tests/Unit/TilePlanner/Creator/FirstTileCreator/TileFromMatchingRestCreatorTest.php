@@ -17,8 +17,7 @@ use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
-use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class TileFromMatchingRestCreatorTest extends TestCase
 {
@@ -35,19 +34,10 @@ final class TileFromMatchingRestCreatorTest extends TestCase
 
     public function test_return_null_if_has_no_rests_for_left_side(): void
     {
-        $rangeValidator = $this->createMock(RangeValidatorInterface::class);
-        $rangeValidator->method('isInRange')->willReturn(false);
+        $tileValidator = $this->createMock(TileValidatorInterface::class);
+        $tileValidator->method('isValid')->willReturn(false);
 
-        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
-        $offsetValidator->method('isValidOffset')->willReturn(true);
-
-        $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
-        $rangeCreator->method('calculateRanges')->willReturn(
-            (new LengthRangeBag())
-                ->addRange((LengthRange::withMinAndMax(10, 30)))
-        );
-
-        $creator = new TileFromMatchingRestCreator($rangeValidator, $offsetValidator, $rangeCreator);
+        $creator = new TileFromMatchingRestCreator($tileValidator);
 
         $plan = new TilePlan();
         $rests = new Rests();
@@ -60,11 +50,8 @@ final class TileFromMatchingRestCreatorTest extends TestCase
 
     public function test_return_first_found_and_matching_tile_from_rest(): void
     {
-        $rangeValidator = $this->createMock(RangeValidatorInterface::class);
-        $rangeValidator->method('isInRange')->willReturn(true);
-
-        $offsetValidator = $this->createStub(OffsetValidatorInterface::class);
-        $offsetValidator->method('isValidOffset')->willReturn(true);
+        $tileValidator = $this->createMock(TileValidatorInterface::class);
+        $tileValidator->method('isValid')->willReturn(true);
 
         $rangeCreator = $this->createMock(TileLengthRangeCreatorInterface::class);
         $rangeCreator->method('calculateRanges')->willReturn(
@@ -72,7 +59,7 @@ final class TileFromMatchingRestCreatorTest extends TestCase
                 ->addRange((LengthRange::withMinAndMax(10, 30)))
         );
 
-        $creator = new TileFromMatchingRestCreator($rangeValidator, $offsetValidator, $rangeCreator);
+        $creator = new TileFromMatchingRestCreator($tileValidator);
 
         $plan = new TilePlan();
         $rests = new Rests();

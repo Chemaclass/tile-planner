@@ -11,42 +11,33 @@ use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class MinimumTileCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private TileLengthRangeCreatorInterface $rangeCalculator,
-        private OffsetValidatorInterface $offsetValidator
+        private TileValidatorInterface $tileValidator,
+        private TileLengthRangeCreatorInterface $rangeCreator,
     ) {
     }
 
     public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
     {
-        $tileMinLength = $tileInput->getMinTileLength();
-        $tileLength = $tileInput->getTileLength();
-
-        $lengthTileLastRow = $plan->getLastRowLength();
-
-        $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
+        $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
         $minLengthOfFirstRange = $tileRanges->getMinOfFirstRange();
 
-        if (
-            $this->offsetValidator->isValidOffset(
-                $minLengthOfFirstRange,
-                $lengthTileLastRow,
-                $tileMinLength,
-                $tileInput->getLayingOptions()->getMinOffset(),
-            )
-        ) {
+        if ($this->tileValidator->isValid($minLengthOfFirstRange, $tileInput, $plan)) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
                 $minLengthOfFirstRange,
                 TileCounter::next()
             );
+
+            $rest = $tileInput->getTileLength() - $tileRanges->getMinOfFirstRange();
+
             $rests->addRest(
-                $tileLength - $minLengthOfFirstRange,
-                $tileMinLength,
+                $rest,
+                $tileInput->getMinTileLength(),
                 TilePlannerConstants::RESTS_RIGHT,
                 $tile->getNumber()
             );

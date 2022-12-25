@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rests;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\OffsetValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreatorInterface
 {
     public function __construct(
-        private OffsetValidatorInterface $offsetValidator,
+        private TileValidatorInterface $tileValidator,
         private TileLengthRangeCreatorInterface $rangeCalculator
     ) {
     }
@@ -30,18 +29,20 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
         $tileRanges = $this->rangeCalculator->calculateRanges($tileInput);
         $maxLengthOfFirstRange = $tileRanges->getMaxOfFirstRange();
 
-        if ($plan->getRowsCount() === 0) {
+        $maxLengthOfFirstRangeWithOffset = $maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset();
+
+        if (0 === $plan->getRowsCount()) {
             return null;
         }
 
-        if ($this->canUseMaxLengthOfFirstRange($plan, $tileInput, $tileRanges)) {
+        if ($this->tileValidator->isValid($maxLengthOfFirstRangeWithOffset, $tileInput, $plan)) {
             $tile = Tile::create(
                 $tileInput->getTileWidth(),
-                $maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset(),
+                $maxLengthOfFirstRangeWithOffset,
                 TileCounter::next()
             );
 
-            $restOfTile = $tileLength - ($maxLengthOfFirstRange - $tileInput->getLayingOptions()->getMinOffset());
+            $restOfTile = $tileLength - $maxLengthOfFirstRangeWithOffset;
 
             $rests->addRest(
                 $restOfTile,
@@ -54,18 +55,5 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
         }
 
         return null;
-    }
-
-    private function canUseMaxLengthOfFirstRange(
-        TilePlan $plan,
-        TilePlanInput $tileInput,
-        LengthRangeBag $tileRanges
-    ): bool {
-        return $this->offsetValidator->isValidOffset(
-            $tileRanges->getMaxOfFirstRange() - $tileInput->getLayingOptions()->getMinOffset(),
-            $plan->getLastRowLength(),
-            $tileInput->getMinTileLength(),
-            $tileInput->getLayingOptions()->getMinOffset()
-        );
     }
 }

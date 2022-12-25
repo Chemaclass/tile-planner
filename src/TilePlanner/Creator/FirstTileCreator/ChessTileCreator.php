@@ -11,19 +11,14 @@ use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\TilePlannerConstants;
-use TilePlanner\TilePlanner\Validator\RangeValidatorInterface;
+use TilePlanner\TilePlanner\Validator\TileValidatorInterface;
 
 final class ChessTileCreator implements FirstTileCreatorInterface
 {
-    private RangeValidatorInterface $rangeValidator;
-    private TileLengthRangeCreatorInterface $rangeCreator;
-
     public function __construct(
-        RangeValidatorInterface $rangeValidator,
-        TileLengthRangeCreatorInterface $rangeCreator
+        private TileValidatorInterface $tileValidator,
+        private TileLengthRangeCreatorInterface $rangeCreator,
     ) {
-        $this->rangeValidator = $rangeValidator;
-        $this->rangeCreator = $rangeCreator;
     }
 
     public function create(
@@ -34,7 +29,7 @@ final class ChessTileCreator implements FirstTileCreatorInterface
         $tileLength = $tileInput->getTileLength();
         $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
 
-        if ($this->rangeValidator->isInRange($tileLength, $tileRanges->getRanges())) {
+        if ($this->tileValidator->isValid($tileInput->getTileLength(), $tileInput, $plan)) {
             return Tile::create(
                 $tileInput->getTileWidth(),
                 $tileLength,
