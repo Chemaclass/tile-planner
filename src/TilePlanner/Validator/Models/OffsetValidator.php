@@ -15,7 +15,7 @@ final class OffsetValidator implements ValidatorInterface
         $lastTileLengthMinusOffset = $lastTileLength - $tileInput->getLayingOptions()->getMinOffset();
         $lastTileLengthPlusOffset = $lastTileLength + $tileInput->getLayingOptions()->getMinOffset();
 
-        if (empty($lastTileLength) && $tileLength >= $tileInput->getMinTileLength()) {
+        if (empty($lastTileLength)) {
             return true;
         }
 
