@@ -34,9 +34,7 @@ $tileInput = new TilePlanInput(
                 width: <float>,
                 length: <float>
             ),
-            new LayingOptions(
-                minTileLength: <float>
-            )
+            (new LayingOptions())->setMinTileLength(<float>)
         );
 
 $plan = TilePlanner::createPlan($inputData);
