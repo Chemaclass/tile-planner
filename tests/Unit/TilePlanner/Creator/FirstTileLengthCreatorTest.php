@@ -20,14 +20,15 @@ final class FirstTileLengthCreatorTest extends TestCase
 
     public function setUp(): void
     {
+        $tileOptions = (new LayingOptions())
+            ->setMinTileLength(30)
+            ->setGapWidth(5)
+            ->setCostsPerSquare(20);
+
         $this->tileInput = new TilePlanInput(
             Room::create(400, 300),
             Tile::create(20, 100),
-            new LayingOptions(
-                minTileLength: 30,
-                costsPerSquare: 20,
-                gapWidth: 5
-            )
+            $tileOptions,
         );
     }
 

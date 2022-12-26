@@ -29,7 +29,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
         $this->tileInput = new TilePlanInput(
             Room::create(200, 100),
             Tile::create(20, 50),
-            new LayingOptions(0)
+            new LayingOptions()
         );
     }
     public function test_return_null_when_it_is_first_row(): void

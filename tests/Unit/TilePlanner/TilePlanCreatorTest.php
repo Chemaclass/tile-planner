@@ -39,7 +39,9 @@ final class TilePlanCreatorTest extends TestCase
         $tileInput = new TilePlanInput(
             Room::create(100, 90),
             Tile::create(25, 50),
-            new LayingOptions(minTileLength: 20, costsPerSquare: 2)
+            (new LayingOptions())
+                ->setMinTileLength(20)
+                ->setCostsPerSquare(2)
         );
 
         $plan = $creator->create($tileInput);

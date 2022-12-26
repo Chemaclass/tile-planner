@@ -6,51 +6,47 @@ namespace TilePlanner\TilePlanner\Models;
 
 final class Row implements \JsonSerializable
 {
-    private static array $tiles = [];
+    private array $tiles = [];
 
-    private static float $width = 0;
+    private float $width = 0;
 
-    private static float $currentLength = 0;
+    private float $currentLength = 0;
 
-    private static int $tileCounter = 0;
-
-    public function __construct(
-    ) {
-    }
+    private int $tileCounter = 0;
 
     public function addTile(Tile $tile): self
     {
-        self::$tiles[] = $tile;
+        $this->tiles[] = $tile;
 
-        self::$currentLength += $tile->getLength();
-        self::$tileCounter++;
+        $this->currentLength += $tile->getLength();
+        $this->tileCounter++;
 
         return $this;
     }
 
     public function getTiles(): array
     {
-        return self::$tiles;
+        return $this->tiles;
     }
 
     public function setWidth(float $width): void
     {
-        self::$width = $width;
+        $this->width = $width;
     }
 
     public function getWidth(): float
     {
-        return self::$width;
+        return $this->width;
     }
 
     public function getCurrentRowLength(): float
     {
-        return self::$currentLength;
+        return $this->currentLength;
     }
 
     public function getTileCount(): int
     {
-        return self::$tileCounter;
+        return $this->tileCounter;
     }
 
     public function jsonSerialize(): object

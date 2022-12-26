@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit;
 
-use TilePlanner\TilePlanner;
 use PHPUnit\Framework\TestCase;
+use TilePlanner\TilePlanner;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -18,7 +18,7 @@ final class TilePlannerTest extends TestCase
         $inputData = new TilePlanInput(
             Room::create(300, 230),
             Tile::create(20, 110),
-            new LayingOptions(30)
+            (new LayingOptions())->setMinTileLength(30),
         );
 
         $planner = TilePlanner::createPlan($inputData);

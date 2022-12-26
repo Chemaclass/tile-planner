@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\Models\TilePlanInput;
 
 final class RowCreator implements RowCreatorInterface
 {
-    private static Row $row;
+    private Row $row;
 
     public function __construct(
         private FirstTileLengthCreatorInterface $firstTileLengthCreator,
@@ -26,7 +26,7 @@ final class RowCreator implements RowCreatorInterface
         TilePlan $plan,
         Rests $rest
     ): Row {
-        self::$row = new Row();
+        $this->row = new Row();
 
         while (!$this->isRowEnd($tileInput->getRoomWidth())) {
             $tile = $this->calculateTile(
@@ -35,7 +35,7 @@ final class RowCreator implements RowCreatorInterface
                 $rest
             );
 
-            self::$row->addTile($tile);
+            $this->row->addTile($tile);
         }
 
         $rowWidth = $this->calculateRowWidth(
@@ -44,14 +44,14 @@ final class RowCreator implements RowCreatorInterface
             $plan->getRowsCount()
         );
 
-        self::$row->setWidth($rowWidth);
+        $this->row->setWidth($rowWidth);
 
-        return self::$row;
+        return $this->row;
     }
 
     private function isRowEnd(float $roomWidth): bool
     {
-        return self::$row->getCurrentRowLength() >= $roomWidth;
+        return $this->row->getCurrentRowLength() >= $roomWidth;
     }
 
     private function calculateTile(
@@ -72,7 +72,7 @@ final class RowCreator implements RowCreatorInterface
                 $tileInput,
                 $plan,
                 $rests,
-                self::$row->getCurrentRowLength()
+                $this->row->getCurrentRowLength()
             );
         }
 
@@ -84,7 +84,7 @@ final class RowCreator implements RowCreatorInterface
 
     private function isLastTileOfRow(TilePlanInput $tileInput): bool
     {
-        $restOfRow = $tileInput->getRoomWidth() - self::$row->getCurrentRowLength();
+        $restOfRow = $tileInput->getRoomWidth() - $this->row->getCurrentRowLength();
 
         return $restOfRow < $tileInput->getTileLength();
     }
@@ -111,6 +111,6 @@ final class RowCreator implements RowCreatorInterface
 
     private function isFirstTileOfRow(): bool
     {
-        return self::$row->getTileCount() === 0;
+        return $this->row->getTileCount() === 0;
     }
 }
