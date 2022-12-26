@@ -26,7 +26,7 @@ final class LastTileLengthCreatorTest extends TestCase
         $this->tileInput = new TilePlanInput(
             Room::create(200, 100),
             Tile::create(20, 59),
-            new LayingOptions(20)
+            (new LayingOptions())->setMinTileLength(20)
         );
     }
 

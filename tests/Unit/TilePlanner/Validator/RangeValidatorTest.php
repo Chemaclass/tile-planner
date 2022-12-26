@@ -34,7 +34,7 @@ final class RangeValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions(30)
+            (new LayingOptions())->setMinTileLength(30),
         );
 
         $actual = $validator->isValid(
@@ -63,7 +63,7 @@ final class RangeValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions(30)
+            (new LayingOptions())->setMinTileLength(30),
         );
 
         $actual = $validator->isValid(

@@ -25,7 +25,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $this->tileInput = new TilePlanInput(
             Room::create(200, 100),
             Tile::create(20, 50),
-            new LayingOptions(0)
+            new LayingOptions()
         );
     }
 

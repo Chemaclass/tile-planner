@@ -8,11 +8,18 @@ final class Row implements \JsonSerializable
 {
     private array $tiles = [];
 
-    private float $width;
+    private float $width = 0;
+
+    private float $currentLength = 0;
+
+    private int $tileCounter = 0;
 
     public function addTile(Tile $tile): self
     {
         $this->tiles[] = $tile;
+
+        $this->currentLength += $tile->getLength();
+        ++$this->tileCounter;
 
         return $this;
     }
@@ -30,6 +37,16 @@ final class Row implements \JsonSerializable
     public function getWidth(): float
     {
         return $this->width;
+    }
+
+    public function getCurrentRowLength(): float
+    {
+        return $this->currentLength;
+    }
+
+    public function getTileCount(): int
+    {
+        return $this->tileCounter;
     }
 
     public function jsonSerialize(): object

@@ -22,7 +22,7 @@ final class TileLengthRangeCreatorTest extends TestCase
         $tileInput = new TilePlanInput(
             Room::create(200, 100),
             Tile::create(20, 50),
-            new LayingOptions(20)
+            (new LayingOptions())->setMinTileLength(20)
         );
 
         $actualRanges = $calculator->calculateRanges($tileInput);
@@ -40,7 +40,7 @@ final class TileLengthRangeCreatorTest extends TestCase
         $tileInput = new TilePlanInput(
             Room::create(200, 100),
             Tile::create(20, 50),
-            new LayingOptions(30)
+            (new LayingOptions())->setMinTileLength(30),
         );
 
         $actualRanges = $calculator->calculateRanges($tileInput);

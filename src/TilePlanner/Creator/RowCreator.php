@@ -13,16 +13,12 @@ use TilePlanner\TilePlanner\Models\TilePlanInput;
 
 final class RowCreator implements RowCreatorInterface
 {
-    private float $usedRowLength = 0;
-    private FirstTileLengthCreatorInterface $firstTileLengthCalculator;
-    private LastTileLengthCreatorInterface $lastTileLengthCalculator;
+    private Row $row;
 
     public function __construct(
-        FirstTileLengthCreatorInterface $firstTileLengthCalculator,
-        LastTileLengthCreatorInterface $lastTileLengthCalculator
+        private FirstTileLengthCreatorInterface $firstTileLengthCreator,
+        private LastTileLengthCreatorInterface $lastTileLengthCreator
     ) {
-        $this->firstTileLengthCalculator = $firstTileLengthCalculator;
-        $this->lastTileLengthCalculator = $lastTileLengthCalculator;
     }
 
     public function createRow(
@@ -30,45 +26,41 @@ final class RowCreator implements RowCreatorInterface
         TilePlan $plan,
         Rests $rest
     ): Row {
-        $row = new Row();
-        $tileCounter = 1;
+        $this->row = new Row();
 
         while (!$this->isRowEnd($tileInput->getRoomWidth())) {
             $tile = $this->calculateTile(
                 $tileInput,
-                $tileCounter,
                 $plan,
                 $rest
             );
 
-            $row->addTile($tile);
-
-            $this->usedRowLength += $tile->getLength();
-            ++$tileCounter;
+            $this->row->addTile($tile);
         }
 
-        $rowWidth = $this->getRowWidth(
+        $rowWidth = $this->calculateRowWidth(
             $tileInput->getRoomDepth(),
             $tileInput->getTileWidth(),
             $plan->getRowsCount()
         );
 
-        $row->setWidth($rowWidth);
+        $this->row->setWidth($rowWidth);
 
-        $this->usedRowLength = 0;
-
-        return $row;
+        return $this->row;
     }
 
     private function isRowEnd(float $roomWidth): bool
     {
-        return $this->usedRowLength >= $roomWidth;
+        return $this->row->getCurrentRowLength() >= $roomWidth;
     }
 
-    private function calculateTile(TilePlanInput $tileInput, int $tileCounter, TilePlan $plan, Rests $rests): Tile
-    {
-        if (1 === $tileCounter) {
-            return $this->firstTileLengthCalculator->create(
+    private function calculateTile(
+        TilePlanInput $tileInput,
+        TilePlan $plan,
+        Rests $rests
+    ): Tile {
+        if ($this->isFirstTileOfRow()) {
+            return $this->firstTileLengthCreator->create(
                 $tileInput,
                 $plan,
                 $rests
@@ -76,11 +68,11 @@ final class RowCreator implements RowCreatorInterface
         }
 
         if ($this->isLastTileOfRow($tileInput)) {
-            return $this->lastTileLengthCalculator->create(
+            return $this->lastTileLengthCreator->create(
                 $tileInput,
                 $plan,
                 $rests,
-                $this->usedRowLength
+                $this->row->getCurrentRowLength()
             );
         }
 
@@ -92,7 +84,7 @@ final class RowCreator implements RowCreatorInterface
 
     private function isLastTileOfRow(TilePlanInput $tileInput): bool
     {
-        $restOfRow = $tileInput->getRoomWidth() - $this->usedRowLength;
+        $restOfRow = $tileInput->getRoomWidth() - $this->row->getCurrentRowLength();
 
         return $restOfRow < $tileInput->getTileLength();
     }
@@ -106,7 +98,7 @@ final class RowCreator implements RowCreatorInterface
         );
     }
 
-    private function getRowWidth(float $roomDepth, float $tileWidth, int $totalRows): float
+    private function calculateRowWidth(float $roomDepth, float $tileWidth, int $totalRows): float
     {
         $currentTiledRoomDepth = $totalRows * $tileWidth;
 
@@ -115,5 +107,10 @@ final class RowCreator implements RowCreatorInterface
         }
 
         return $tileWidth;
+    }
+
+    private function isFirstTileOfRow(): bool
+    {
+        return $this->row->getTileCount() === 0;
     }
 }

@@ -19,12 +19,13 @@ final class OffsetValidatorTest extends TestCase
     {
         $validator = new OffsetValidator();
 
+
         $currentLength = 20;
         $plan = new TilePlan();
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions(30)
+            (new LayingOptions())->setMinTileLength(30),
         );
 
         $actual = $validator->isValid(
@@ -47,10 +48,9 @@ final class OffsetValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions(
-                minTileLength: 30,
-                minOffset: 30
-            )
+            (new LayingOptions())
+                ->setMinTileLength(30)
+                ->setMinOffset(30)
         );
 
         $actual = $validator->isValid(
@@ -73,10 +73,9 @@ final class OffsetValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions(
-                minTileLength: 30,
-                minOffset: 30
-            )
+            (new LayingOptions())
+                ->setMinOffset(30)
+                ->setMinOffset(30)
         );
 
         $actual = $validator->isValid(
@@ -99,10 +98,9 @@ final class OffsetValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions(
-                minTileLength: 30,
-                minOffset: 30
-            )
+            (new LayingOptions())
+                ->setMinTileLength(30)
+                ->setMinOffset(30)
         );
 
         $actual = $validator->isValid(

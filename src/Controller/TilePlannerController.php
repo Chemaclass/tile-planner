@@ -41,9 +41,8 @@ class TilePlannerController extends AbstractController
                         $this->stringToFloatConverter->toFloat($formData['tile_width']),
                         $this->stringToFloatConverter->toFloat($formData['tile_length']),
                     ),
-                    new LayingOptions(
-                        $this->stringToFloatConverter->toFloat($formData['min_tile_length'])
-                    )
+                    (new LayingOptions())
+                        ->setMinTileLength($this->stringToFloatConverter->toFloat($formData['min_tile_length']))
                 );
             } catch (InvalidArgumentException $exception) {
                 return $this->render(

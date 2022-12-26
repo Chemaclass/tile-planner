@@ -26,7 +26,7 @@ final class MinLengthValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions($minLength)
+            (new LayingOptions())->setMinTileLength($minLength)
         );
 
         $actual = $validator->isValid(
@@ -49,7 +49,7 @@ final class MinLengthValidatorTest extends TestCase
         $input = new TilePlanInput(
             Room::create(200, 300),
             Tile::create(20, 100),
-            new LayingOptions($minLength)
+            (new LayingOptions())->setMinTileLength($minLength),
         );
 
         $actual = $validator->isValid(
