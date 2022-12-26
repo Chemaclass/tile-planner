@@ -42,7 +42,7 @@ final class LayingOptions
 
     public function setGapWidth(float $gapWidth): self
     {
-        $this->gapWidth= $gapWidth;
+        $this->gapWidth = $gapWidth;
 
         return $this;
     }

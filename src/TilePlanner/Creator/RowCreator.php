@@ -57,8 +57,8 @@ final class RowCreator implements RowCreatorInterface
     private function calculateTile(
         TilePlanInput $tileInput,
         TilePlan $plan,
-        Rests $rests): Tile
-    {
+        Rests $rests
+    ): Tile {
         if ($this->isFirstTileOfRow()) {
             return $this->firstTileLengthCreator->create(
                 $tileInput,

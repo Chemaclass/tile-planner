@@ -19,7 +19,7 @@ final class Row implements \JsonSerializable
         $this->tiles[] = $tile;
 
         $this->currentLength += $tile->getLength();
-        $this->tileCounter++;
+        ++$this->tileCounter;
 
         return $this;
     }
