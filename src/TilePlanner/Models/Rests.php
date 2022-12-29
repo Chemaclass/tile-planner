@@ -46,6 +46,7 @@ final class Rests
         foreach (self::$rest[$side] as $key => $rest) {
             if ($rest->getLength() === $length) {
                 unset(self::$rest[$side][$key]);
+
                 break;
             }
         }
@@ -79,7 +80,8 @@ final class Rests
 
     private function totalLengthOfRestsFromSide(string $side): float
     {
-        return array_sum(array_map(static function(Rest $rest) {
+        return array_sum(
+            array_map(static function (Rest $rest) {
                 return $rest->getLength();
             }, $this->getRests($side))
         );
