@@ -49,7 +49,7 @@ final class TilePlanCreator
                 $this->rests->getRests(TilePlannerConstants::RESTS_RIGHT)
             )
         );
-        $plan->setTotalRest($this->rests->sumOfAll());
+        $plan->setTotalRest($this->rests->totalLengthOfAllRests());
 
         return $plan;
     }
