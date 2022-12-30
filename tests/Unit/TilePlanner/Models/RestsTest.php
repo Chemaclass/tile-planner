@@ -11,13 +11,10 @@ use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class RestsTest extends TestCase
 {
-    public function setUp(): void
-    {
-        $this->resetRests();
-    }
-
     public function test_removing_one_rest_should_not_remove_all(): void
     {
+        $this->resetRests();
+
         $rests = new Rests();
 
         $rests->addRest(90, 30, TilePlannerConstants::RESTS_LEFT, 1);
@@ -33,6 +30,8 @@ final class RestsTest extends TestCase
 
     public function test_sum_all_rests(): void
     {
+        $this->resetRests();
+
         $rests = new Rests();
 
         $rests->addRest(40, 20, TilePlannerConstants::RESTS_LEFT, 1);
@@ -47,6 +46,8 @@ final class RestsTest extends TestCase
 
     public function test_rest_is_trash_when_smaller_then_min_length(): void
     {
+        $this->resetRests();
+
         $rests = new Rests();
 
         $rests->addRest(20, 30, TilePlannerConstants::RESTS_LEFT, 1);
