@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner;
 
 use TilePlanner\TilePlanner\Creator\RowCreatorInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -14,9 +14,9 @@ use TilePlanner\TilePlanner\Models\TilePlanInput;
 final class TilePlanCreator
 {
     private RowCreatorInterface $creator;
-    private Rests $rests;
+    private RestBag $rests;
 
-    public function __construct(RowCreatorInterface $rowCreator, Rests $rests)
+    public function __construct(RowCreatorInterface $rowCreator, RestBag $rests)
     {
         $this->creator = $rowCreator;
         $this->rests = $rests;

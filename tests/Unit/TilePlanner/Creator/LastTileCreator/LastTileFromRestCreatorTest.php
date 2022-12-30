@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use PHPUnit\Framework\TestCase;
 
 final class LastTileFromRestCreatorTest extends TestCase
@@ -34,7 +34,7 @@ final class LastTileFromRestCreatorTest extends TestCase
         $creator = new LastTileFromRestCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 150);
 
@@ -46,7 +46,7 @@ final class LastTileFromRestCreatorTest extends TestCase
         $creator = new LastTileFromRestCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_RIGHT => [
@@ -65,7 +65,7 @@ final class LastTileFromRestCreatorTest extends TestCase
         $creator = new LastTileFromRestCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_RIGHT => [
@@ -85,7 +85,7 @@ final class LastTileFromRestCreatorTest extends TestCase
         $creator = new LastTileFromRestCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_RIGHT => [

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\LastTileCreator;
 
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class LastTileFromRestForChessTypeCreator implements LastTileCreatorInterface
 {
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests, float $usedRowLength): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests, float $usedRowLength): ?Tile
     {
         $restOfRow = $tileInput->getRoomWidth() - $usedRowLength;
         $foundRest = $this->findTileInRests($restOfRow, $rests);
@@ -29,7 +29,7 @@ final class LastTileFromRestForChessTypeCreator implements LastTileCreatorInterf
         return null;
     }
 
-    private function findTileInRests(float $length, Rests $rests): ?Rest
+    private function findTileInRests(float $length, RestBag $rests): ?Rest
     {
         if ($rests->hasRest(TilePlannerConstants::RESTS_LEFT)) {
             $possibleRests = [];

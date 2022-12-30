@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator;
 
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
@@ -24,7 +24,7 @@ final class RowCreator implements RowCreatorInterface
     public function createRow(
         TilePlanInput $tileInput,
         TilePlan $plan,
-        Rests $rest
+        RestBag $rest
     ): Row {
         $this->row = new Row();
 
@@ -57,7 +57,7 @@ final class RowCreator implements RowCreatorInterface
     private function calculateTile(
         TilePlanInput $tileInput,
         TilePlan $plan,
-        Rests $rests
+        RestBag $rests
     ): Tile {
         if ($this->isFirstTileOfRow()) {
             return $this->firstTileLengthCreator->create(

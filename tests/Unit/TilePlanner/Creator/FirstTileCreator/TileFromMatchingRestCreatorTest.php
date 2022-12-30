@@ -11,7 +11,7 @@ use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -40,7 +40,7 @@ final class TileFromMatchingRestCreatorTest extends TestCase
         $creator = new TileFromMatchingRestCreator($tileValidator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest([]);
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
@@ -62,7 +62,7 @@ final class TileFromMatchingRestCreatorTest extends TestCase
         $creator = new TileFromMatchingRestCreator($tileValidator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [

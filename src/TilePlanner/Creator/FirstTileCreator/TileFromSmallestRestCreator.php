@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinderInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -20,7 +20,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
     {
         $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $rests);
 
@@ -54,7 +54,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
     private function calculateTileWithOffset(
         TilePlan $plan,
         TilePlanInput $tileInput,
-        Rests $rests
+        RestBag $rests
     ): ?float {
         $lengthTileLastRow = $plan->getLastRowLength();
         $tileWidthIncludingOffset = $lengthTileLastRow - $tileInput->getLayingOptions()->getMinOffset();

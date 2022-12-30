@@ -11,7 +11,7 @@ use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -45,7 +45,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
         $creator = new MaximumPossibleTileIncludingOffsetCreator($tileValidator, $rangeCalculator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
@@ -75,7 +75,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
 
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
@@ -105,7 +105,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
 
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [

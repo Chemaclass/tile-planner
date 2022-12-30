@@ -6,7 +6,7 @@ namespace TilePlanner\TilePlanner\Models;
 
 use TilePlanner\TilePlanner\TilePlannerConstants;
 
-final class Rests
+final class RestBag
 {
     private static array $rest = [
         TilePlannerConstants::RESTS_LEFT => [],

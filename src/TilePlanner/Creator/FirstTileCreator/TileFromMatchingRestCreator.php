@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -19,7 +19,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
     {
         if (!$rests->hasRest(TilePlannerConstants::RESTS_LEFT)) {
             return null;
@@ -45,7 +45,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
     }
 
     private function findMatchingRest(
-        Rests $rests,
+        RestBag $rests,
         TilePlan $plan,
         TilePlanInput $tileInput
     ): ?Rest {

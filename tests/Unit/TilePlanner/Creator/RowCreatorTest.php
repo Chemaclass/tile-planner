@@ -9,7 +9,7 @@ use TilePlanner\TilePlanner\Creator\FirstTileLengthCreatorInterface;
 use TilePlanner\TilePlanner\Creator\LastTileLengthCreatorInterface;
 use TilePlanner\TilePlanner\Creator\RowCreator;
 use TilePlanner\TilePlanner\Models\LayingOptions;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -38,7 +38,7 @@ final class RowCreatorTest extends TestCase
     public function test_row_has_correct_amount_of_tiles(): void
     {
         $plan = new TilePlan();
-        $rest = new Rests();
+        $rest = new RestBag();
 
         $tileInput = new TilePlanInput(
             Room::create(200, 100),
@@ -54,7 +54,7 @@ final class RowCreatorTest extends TestCase
     public function test_row_has_same_with_as_tile(): void
     {
         $plan = new TilePlan();
-        $rest = new Rests();
+        $rest = new RestBag();
 
         $tileInput = new TilePlanInput(
             Room::create(200, 100),
@@ -72,7 +72,7 @@ final class RowCreatorTest extends TestCase
         $plan = new TilePlan();
         $plan->addRow(new Row());
 
-        $rest = new Rests();
+        $rest = new RestBag();
 
         $tileInput = new TilePlanInput(
             Room::create(200, 30),
@@ -88,7 +88,7 @@ final class RowCreatorTest extends TestCase
     public function test_first_tile_of_row_has_number_one(): void
     {
         $plan = new TilePlan();
-        $rest = new Rests();
+        $rest = new RestBag();
 
         $tileInput = new TilePlanInput(
             Room::create(450, 330),

@@ -6,7 +6,7 @@ namespace TilePlannerTests\Unit\TilePlanner\Models;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class RestsTest extends TestCase
@@ -15,7 +15,7 @@ final class RestsTest extends TestCase
     {
         $this->resetRests();
 
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $rests->addRest(90, 30, TilePlannerConstants::RESTS_LEFT, 1);
         $rests->addRest(90, 30, TilePlannerConstants::RESTS_LEFT, 2);
@@ -32,7 +32,7 @@ final class RestsTest extends TestCase
     {
         $this->resetRests();
 
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $rests->addRest(40, 20, TilePlannerConstants::RESTS_LEFT, 1);
         $rests->addRest(30, 20, TilePlannerConstants::RESTS_LEFT, 2);
@@ -48,7 +48,7 @@ final class RestsTest extends TestCase
     {
         $this->resetRests();
 
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $rests->addRest(20, 30, TilePlannerConstants::RESTS_LEFT, 1);
 
@@ -58,7 +58,7 @@ final class RestsTest extends TestCase
 
     private function resetRests(): void
     {
-        $reflection = new ReflectionClass(Rests::class);
+        $reflection = new ReflectionClass(RestBag::class);
         $reflection->setStaticPropertyValue('rest', [
             TilePlannerConstants::RESTS_LEFT => [],
             TilePlannerConstants::RESTS_RIGHT => []

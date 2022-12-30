@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator;
 
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileCreatorInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -26,7 +26,7 @@ final class LastTileLengthCreator implements LastTileLengthCreatorInterface
     public function create(
         TilePlanInput $tileInput,
         TilePlan $plan,
-        Rests $rests,
+        RestBag $rests,
         float $usedRowLength
     ): Tile {
         $tileLength = $tileInput->getTileLength();

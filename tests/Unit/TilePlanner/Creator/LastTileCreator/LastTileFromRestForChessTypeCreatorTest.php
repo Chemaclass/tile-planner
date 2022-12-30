@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\TilePlannerConstants;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use PHPUnit\Framework\TestCase;
 
 final class LastTileFromRestForChessTypeCreatorTest extends TestCase
@@ -34,7 +34,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $creator = new LastTileFromRestForChessTypeCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 150);
 
@@ -46,7 +46,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $creator = new LastTileFromRestForChessTypeCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
@@ -65,7 +65,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $creator = new LastTileFromRestForChessTypeCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
@@ -86,7 +86,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $creator = new LastTileFromRestForChessTypeCreator();
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
                 TilePlannerConstants::RESTS_LEFT => [
