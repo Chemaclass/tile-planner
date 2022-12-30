@@ -63,5 +63,6 @@ final class RestsTest extends TestCase
             TilePlannerConstants::RESTS_LEFT => [],
             TilePlannerConstants::RESTS_RIGHT => []
         ]);
+        $reflection->setStaticPropertyValue('trash', []);
     }
 }
