@@ -46,6 +46,8 @@ final class Rests
         foreach (self::$rest[$side] as $key => $rest) {
             if ($rest->getLength() === $length) {
                 unset(self::$rest[$side][$key]);
+
+                break;
             }
         }
 
@@ -69,8 +71,19 @@ final class Rests
         return self::$trash;
     }
 
-    public function sumOfAll(): float
+    public function totalLengthOfAllRests(): float
     {
-        return array_sum($this->getRests(TilePlannerConstants::RESTS_LEFT)) + array_sum($this->getRests(TilePlannerConstants::RESTS_RIGHT)) + array_sum($this->getTrash());
+        return $this->totalLengthOfRestsFromSide(TilePlannerConstants::RESTS_LEFT)
+            + $this->totalLengthOfRestsFromSide(TilePlannerConstants::RESTS_RIGHT)
+            + array_sum($this->getTrash());
+    }
+
+    private function totalLengthOfRestsFromSide(string $side): float
+    {
+        return array_sum(
+            array_map(static function (Rest $rest) {
+                return $rest->getLength();
+            }, $this->getRests($side))
+        );
     }
 }
