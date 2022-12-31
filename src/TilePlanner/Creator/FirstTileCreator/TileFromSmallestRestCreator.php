@@ -20,9 +20,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
-        $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $rests);
+        $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $restBag);
 
         if (null === $tileWidthIncludingOffset) {
             return null;
@@ -40,9 +40,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             return null;
         }
 
-        $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
+        $restBag->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
         $trash = $smallestRest->getLength() - $tileWidthIncludingOffset;
-        $rests->addThrash($trash);
+        $restBag->addNonReusableRest($trash);
 
         return Tile::create(
             $tileInput->getTileWidth(),
@@ -65,7 +65,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 
         $remainingRows = $tileInput->getTotalRows() - $plan->getRowsCount();
 
-        if (\count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
+        if (\count($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
             return null;
         }
 

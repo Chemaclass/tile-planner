@@ -21,7 +21,7 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
         $tileMinLength = $tileInput->getMinTileLength();
         $tileLength = $tileInput->getTileLength();
@@ -44,7 +44,7 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
 
             $restOfTile = $tileLength - $maxLengthOfFirstRangeWithOffset;
 
-            $rests->addRest(
+            $restBag->addRest(
                 $restOfTile,
                 $tileMinLength,
                 TilePlannerConstants::RESTS_RIGHT,

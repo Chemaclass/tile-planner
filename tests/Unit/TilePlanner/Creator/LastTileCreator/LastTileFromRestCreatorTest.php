@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlannerTests\Unit\TilePlanner\Creator\LastTileCreator;
 
+use ReflectionProperty;
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFromRestCreator;
 use TilePlanner\TilePlanner\Models\LayingOptions;
@@ -22,6 +23,8 @@ final class LastTileFromRestCreatorTest extends TestCase
 
     public function setUp(): void
     {
+        $this->clearRests();
+
         $this->tileInput = new TilePlanInput(
             Room::create(200, 100),
             Tile::create(20, 50),
@@ -36,7 +39,9 @@ final class LastTileFromRestCreatorTest extends TestCase
         $plan = new TilePlan();
         $rests = new RestBag();
 
-        $actualTile = $creator->create($this->tileInput, $plan, $rests, 150);
+        $usedRowLength = 150;
+
+        $actualTile = $creator->create($this->tileInput, $plan, $rests, $usedRowLength);
 
         self::assertNull($actualTile);
     }
@@ -47,13 +52,7 @@ final class LastTileFromRestCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $rests = new RestBag();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_RIGHT => [
-                    Rest::create(50, 1)
-                ]
-            ]
-        );
+        $rests->addRest(50, 20, TilePlannerConstants::RESTS_RIGHT, 1);
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 150);
 
@@ -68,16 +67,14 @@ final class LastTileFromRestCreatorTest extends TestCase
         $rests = new RestBag();
         $rests::setRest(
             [
-                TilePlannerConstants::RESTS_RIGHT => [
-                    Rest::create(80, 1),
-                ]
+                Rest::createReusable(80, 1, TilePlannerConstants::RESTS_RIGHT),
             ]
         );
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 140);
 
         self::assertEquals(60, $actualTile->getLength());
-        self::assertEmpty($rests->getRests(TilePlannerConstants::RESTS_RIGHT));
+        self::assertEmpty($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT));
     }
 
     public function test_return_tile_cut_of_from_lowest_found_rest_having_multiple_rests(): void
@@ -86,24 +83,25 @@ final class LastTileFromRestCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $rests = new RestBag();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_RIGHT => [
-                    Rest::create(80, 1),
-                    Rest::create(70, 2),
-                    Rest::create(20, 2),
-                ]
-            ]
-        );
+        $rests->addRest(80, 10, TilePlannerConstants::RESTS_RIGHT, 1);
+        $rests->addRest(70, 10, TilePlannerConstants::RESTS_RIGHT, 2);
+        $rests->addRest(20, 10, TilePlannerConstants::RESTS_RIGHT, 3);
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 140);
 
         $expectedRest = [
-            Rest::create(80, 1),
-            Rest::create(20, 2),
+            Rest::createReusable(80, 1, TilePlannerConstants::RESTS_RIGHT),
+            Rest::createReusable(20, 3, TilePlannerConstants::RESTS_RIGHT),
         ];
 
         self::assertEquals(60, $actualTile->getLength());
-        self::assertEquals($expectedRest, array_values($rests->getRests(TilePlannerConstants::RESTS_RIGHT)));
+        self::assertEquals($expectedRest, array_values($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT)));
+    }
+
+    private function clearRests(): void
+    {
+        $restProperty = new ReflectionProperty(RestBag::class, 'rests');
+        $restProperty->setAccessible(true);
+        $restProperty->setValue([]);
     }
 }

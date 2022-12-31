@@ -24,7 +24,7 @@ final class ChessTileCreator implements FirstTileCreatorInterface
     public function create(
         TilePlanInput $tileInput,
         TilePlan $plan,
-        RestBag $rests
+        RestBag $restBag
     ): ?Tile {
         $tileLength = $tileInput->getTileLength();
         $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
@@ -43,7 +43,7 @@ final class ChessTileCreator implements FirstTileCreatorInterface
             TileCounter::next()
         );
 
-        $rests->addRest(
+        $restBag->addRest(
             $tileLength - $tileRanges->getMinOfFirstRange(),
             $tileInput->getMinTileLength(),
             TilePlannerConstants::RESTS_LEFT,

@@ -21,7 +21,7 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
         $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
         $minLengthOfFirstRange = $tileRanges->getMinOfFirstRange();
@@ -35,7 +35,7 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
 
             $rest = $tileInput->getTileLength() - $tileRanges->getMinOfFirstRange();
 
-            $rests->addRest(
+            $restBag->addRest(
                 $rest,
                 $tileInput->getMinTileLength(),
                 TilePlannerConstants::RESTS_RIGHT,

@@ -18,7 +18,7 @@ final class FullTileCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
         $tileLength = $tileInput->getTileLength();
 

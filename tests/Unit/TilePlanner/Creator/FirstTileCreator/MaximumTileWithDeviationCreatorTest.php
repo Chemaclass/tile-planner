@@ -46,13 +46,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $rests = new RestBag();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(70, 3),
-                ]
-            ]
-        );
+        $rests->addRest(70, 20, TilePlannerConstants::RESTS_LEFT, 3);
 
         $tile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -76,13 +70,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
 
         $rests = new RestBag();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(70, 3),
-                ]
-            ]
-        );
+        $rests->addRest(70, 20, TilePlannerConstants::RESTS_LEFT, 3);
 
         $tile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -106,13 +94,7 @@ final class MaximumTileWithDeviationCreatorTest extends TestCase
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
 
         $rests = new RestBag();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(70, 3),
-                ]
-            ]
-        );
+        $rests->addRest(70, 20, TilePlannerConstants::RESTS_LEFT, 3);
 
         $tile = $creator->create($this->tileInput, $plan, $rests);
 

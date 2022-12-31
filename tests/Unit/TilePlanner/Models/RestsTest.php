@@ -22,7 +22,7 @@ final class RestsTest extends TestCase
 
         $rests->removeRest(90, TilePlannerConstants::RESTS_LEFT);
 
-        $remainingRests = $rests->getRests(TilePlannerConstants::RESTS_LEFT);
+        $remainingRests = $rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT);
 
         $this->assertCount(1, $remainingRests);
         $this->assertEquals(90, current($remainingRests)->getLength());
@@ -37,10 +37,10 @@ final class RestsTest extends TestCase
         $rests->addRest(40, 20, TilePlannerConstants::RESTS_LEFT, 1);
         $rests->addRest(30, 20, TilePlannerConstants::RESTS_LEFT, 2);
         $rests->addRest(20, 20, TilePlannerConstants::RESTS_RIGHT, 3);
-        $rests->addThrash(10);
+        $rests->addNonReusableRest(10);
 
-        $this->assertTrue($rests->hasRest(TilePlannerConstants::RESTS_LEFT));
-        $this->assertTrue($rests->hasRest(TilePlannerConstants::RESTS_RIGHT));
+        $this->assertNotEmpty($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
+        $this->assertNotEmpty($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT));
         $this->assertEquals(100, $rests->totalLengthOfAllRests());
     }
 
@@ -49,20 +49,14 @@ final class RestsTest extends TestCase
         $this->resetRests();
 
         $rests = new RestBag();
-
         $rests->addRest(20, 30, TilePlannerConstants::RESTS_LEFT, 1);
 
-        $this->assertFalse($rests->hasRest(TilePlannerConstants::RESTS_LEFT));
-        $this->assertNotEmpty($rests->getTrash());
+        $this->assertEmpty($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 
     private function resetRests(): void
     {
         $reflection = new ReflectionClass(RestBag::class);
-        $reflection->setStaticPropertyValue('rest', [
-            TilePlannerConstants::RESTS_LEFT => [],
-            TilePlannerConstants::RESTS_RIGHT => []
-        ]);
-        $reflection->setStaticPropertyValue('trash', []);
+        $reflection->setStaticPropertyValue('rests', []);
     }
 }

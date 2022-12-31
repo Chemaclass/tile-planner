@@ -6,7 +6,6 @@ namespace TilePlannerTests\Unit\TilePlanner\Creator\LastTileCreator;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\RestBag;
@@ -38,12 +37,12 @@ final class LastTileFittingCreatorTest extends TestCase
         $actualTile = $creator->create($tileInput, $plan, $rests, $usedRowLength);
 
         self::assertEquals(25, $actualTile->getLength());
-        self::assertCount(1, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        self::assertCount(1, $rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 
     private function clearRests(): void
     {
-        $restProperty = new ReflectionProperty(RestBag::class, 'rest');
+        $restProperty = new ReflectionProperty(RestBag::class, 'rests');
         $restProperty->setAccessible(true);
         $restProperty->setValue([]);
     }

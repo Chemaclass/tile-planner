@@ -14,6 +14,6 @@ interface FirstTileCreatorInterface
     public function create(
         TilePlanInput $tileInput,
         TilePlan $plan,
-        RestBag $rests
+        RestBag $restBag
     ): ?Tile;
 }

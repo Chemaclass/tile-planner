@@ -49,9 +49,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $rests = new RestBag();
         $rests::setRest(
             [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(25, 1)
-                ]
+                Rest::createReusable(25, 1, TilePlannerConstants::RESTS_LEFT),
             ]
         );
 
@@ -68,9 +66,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $rests = new RestBag();
         $rests::setRest(
             [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(80, 1),
-                ]
+                Rest::createReusable(80, 1, TilePlannerConstants::RESTS_LEFT),
             ]
         );
         $usedRowLength = 175;
@@ -78,7 +74,7 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $actualTile = $creator->create($this->tileInput, $plan, $rests, $usedRowLength);
 
         self::assertEquals(25, $actualTile->getLength());
-        self::assertCount(0, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        self::assertCount(0, $rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 
     public function test_return_tile_cut_of_from_lowest_found_rest_having_multiple_rests(): void
@@ -89,11 +85,9 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $rests = new RestBag();
         $rests::setRest(
             [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(80, 1),
-                    Rest::create(70, 2),
-                    Rest::create(50, 2),
-                ]
+                Rest::createReusable(80, 1, TilePlannerConstants::RESTS_LEFT),
+                Rest::createReusable(70, 2, TilePlannerConstants::RESTS_LEFT),
+                Rest::createReusable(50, 3, TilePlannerConstants::RESTS_LEFT),
             ]
         );
         $usedRowLength = 175;
@@ -101,6 +95,6 @@ final class LastTileFromRestForChessTypeCreatorTest extends TestCase
         $actualTile = $creator->create($this->tileInput, $plan, $rests, $usedRowLength);
 
         self::assertEquals(25, $actualTile->getLength());
-        self::assertCount(2, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        self::assertCount(2, $rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 }

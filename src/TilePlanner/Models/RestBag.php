@@ -4,48 +4,52 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Models;
 
-use TilePlanner\TilePlanner\TilePlannerConstants;
-
 final class RestBag
 {
-    private static array $rest = [
-        TilePlannerConstants::RESTS_LEFT => [],
-        TilePlannerConstants::RESTS_RIGHT => [],
-    ];
-
-    private static array $trash = [];
+    /**
+     * @var array<Rest>
+     */
+    private static array $rests;
 
     public static function setRest(array $rests): void
     {
-        self::$rest = $rests;
+        self::$rests = $rests;
     }
 
     /**
      * @return list<Rest>
      */
-    public function getRests(string $side): array
+    public function getReusableRestsForSide(string $side): array
     {
-        return self::$rest[$side];
-    }
-
-    public function addRest(float $length, float $tileMinLength, string $side, int $number): self
-    {
-        $rest = Rest::create($length, $number);
-
-        if ($length >= $tileMinLength) {
-            self::$rest[$side][] = $rest;
-        } else {
-            self::$trash[] = $rest->getLength();
+        if (empty(self::$rests)) {
+            return [];
         }
 
-        return $this;
+        return array_filter(self::$rests, static fn(Rest $rest) =>
+            $rest->getSide() === $side
+            && $rest->isReusable()
+        );
+    }
+
+    public function addRest(float $length, float $tileMinLength, string $side, int $number): void
+    {
+        if ($length >= $tileMinLength) {
+            self::$rests[] = Rest::createReusable($length, $number, $side);
+        } else {
+            self::$rests[] = Rest::createNonReusable($length, $number, $side);
+        }
+    }
+
+    public function addNonReusableRest(float $length): void
+    {
+        self::$rests[] = Rest::createNonReusable($length);
     }
 
     public function removeRest(float $length, string $side): self
     {
-        foreach (self::$rest[$side] as $key => $rest) {
-            if ($rest->getLength() === $length) {
-                unset(self::$rest[$side][$key]);
+        foreach (self::$rests as $key => $rest) {
+            if ($rest->getLength() === $length && $rest->getSide() === $side) {
+                unset(self::$rests[$key]);
 
                 break;
             }
@@ -54,36 +58,14 @@ final class RestBag
         return $this;
     }
 
-    public function hasRest(string $side): bool
-    {
-        return !empty(self::$rest[$side]);
-    }
-
-    public function addThrash(float $trash): self
-    {
-        self::$trash[] = $trash;
-
-        return $this;
-    }
-
-    public function getTrash(): array
-    {
-        return self::$trash;
-    }
-
     public function totalLengthOfAllRests(): float
     {
-        return $this->totalLengthOfRestsFromSide(TilePlannerConstants::RESTS_LEFT)
-            + $this->totalLengthOfRestsFromSide(TilePlannerConstants::RESTS_RIGHT)
-            + array_sum($this->getTrash());
-    }
+        if (empty(self::$rests)) {
+            return 0;
+        }
 
-    private function totalLengthOfRestsFromSide(string $side): float
-    {
-        return array_sum(
-            array_map(static function (Rest $rest) {
-                return $rest->getLength();
-            }, $this->getRests($side))
-        );
+        return array_sum(array_map(static function (Rest $rest) {
+            return $rest->getLength();
+        }, self::$rests));
     }
 }

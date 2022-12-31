@@ -6,18 +6,25 @@ namespace TilePlanner\TilePlanner\Models;
 
 final class Rest
 {
-    private float $length;
-    private int $number;
-
-    private function __construct(float $length, int $number)
-    {
-        $this->length = $length;
-        $this->number = $number;
+    private function __construct(
+        private $length,
+        private ?int $number,
+        private ?string $side,
+        private bool $isReusable,
+    ) {
     }
 
-    public static function create(float $length, int $number): self
+    public static function createReusable(float $length, int $number, string $side): self
     {
-        return new self($length, $number);
+        return new self($length, $number, $side, true);
+    }
+
+    public static function createNonReusable(
+        float $length,
+        ?int $number = null,
+        ?string $side = null
+    ): self {
+        return new self($length, $number, $side, false);
     }
 
     public function getLength(): float
@@ -25,9 +32,19 @@ final class Rest
         return $this->length;
     }
 
-    public function getNumber(): int
+    public function isReusable(): bool
+    {
+        return $this->isReusable;
+    }
+
+    public function getNumber(): ?int
     {
         return $this->number;
+    }
+
+    public function getSide(): ?string
+    {
+        return $this->side;
     }
 
     public function setLength(float $length): self

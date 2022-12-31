@@ -27,12 +27,6 @@ final class TilePlanCreatorTest extends TestCase
         );
 
         $rests = new RestBag();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [],
-                TilePlannerConstants::RESTS_RIGHT => [],
-            ]
-        );
 
         $creator = new TilePlanCreator($rowCreator, $rests);
 

@@ -42,11 +42,11 @@ final class TilePlanCreator
         $plan->setTotalPrice($plan->getTotalAreaInSquareMeter() * $tileInput->getCostsPerSquare());
         $plan->setRoomWidth($tileInput->getRoomWidthWithGaps());
         $plan->setRoomDepth($tileInput->getRoomDepthWithGaps());
-        $plan->setTrash($this->mergeTiles($this->rests->getTrash()));
+        //$plan->setTrash($this->mergeTiles($this->rests->())); // TODO
         $plan->setRests(
             array_merge(
-                $this->rests->getRests(TilePlannerConstants::RESTS_LEFT),
-                $this->rests->getRests(TilePlannerConstants::RESTS_RIGHT)
+                $this->rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT),
+                $this->rests->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT)
             )
         );
         $plan->setTotalRest($this->rests->totalLengthOfAllRests());

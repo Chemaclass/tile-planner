@@ -21,7 +21,7 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
         $tileMinLength = $tileInput->getMinTileLength();
         $tileLength = $tileInput->getTileLength();
@@ -38,7 +38,7 @@ final class MaximumTileCreator implements FirstTileCreatorInterface
 
             $restOfTile = $tileLength - $maxLengthOfFirstRange;
 
-            $rests->addRest(
+            $restBag->addRest(
                 $restOfTile,
                 $tileMinLength,
                 TilePlannerConstants::RESTS_RIGHT,

@@ -29,13 +29,20 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
         return null;
     }
 
-    private function findTileInRests(float $length, RestBag $rests): ?Rest
+    private function findTileInRests(float $length, RestBag $restBag): ?Rest
     {
-        if ($rests->hasRest(TilePlannerConstants::RESTS_RIGHT)) {
+        $rests = $restBag->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT);
+
+        if (!empty($rests)) {
             $possibleRests = [];
-            foreach ($rests->getRests(TilePlannerConstants::RESTS_RIGHT) as $rest) {
+            foreach ($rests as $rest) {
+
+                if (!$rest->isReusable()) {
+                    continue;
+                }
+
                 if ($rest->getLength() === $length) {
-                    $rests->removeRest($rest->getLength(), TilePlannerConstants::RESTS_RIGHT);
+                    $restBag->removeRest($rest->getLength(), TilePlannerConstants::RESTS_RIGHT);
 
                     return $rest;
                 }
@@ -47,10 +54,13 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
 
             if (!empty($possibleRests)) {
                 $smallestRest = $this->getRestWithSmallestLength($possibleRests);
-                $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_RIGHT);
+                $restBag->removeRest(
+                    $smallestRest->getLength(),
+                    TilePlannerConstants::RESTS_RIGHT
+                );
 
                 $trash = $smallestRest->getLength() - $length;
-                $rests->addThrash($trash);
+                $restBag->addNonReusableRest($trash);
 
                 return $smallestRest->setLength($length);
             }
@@ -64,7 +74,7 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
      */
     private function getRestWithSmallestLength(array $possibleRests): Rest
     {
-        if (1 === \count($possibleRests)) {
+        if (1 === count($possibleRests)) {
             return array_pop($possibleRests);
         }
 

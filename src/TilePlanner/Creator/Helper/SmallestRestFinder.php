@@ -16,7 +16,7 @@ final class SmallestRestFinder implements SmallestRestFinderInterface
 
     public function findSmallestRestWithMinLength(string $side, float $minWidth): ?Rest
     {
-        $restsForSide = $this->rests->getRests($side);
+        $restsForSide = $this->rests->getReusableRestsForSide($side);
 
         if (empty($restsForSide)) {
             return null;

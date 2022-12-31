@@ -41,7 +41,6 @@ final class TileFromMatchingRestCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $rests = new RestBag();
-        $rests::setRest([]);
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -63,11 +62,12 @@ final class TileFromMatchingRestCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $rests = new RestBag();
+        $rests->addRest(35, 1, TilePlannerConstants::RESTS_LEFT, 1);
+
         $rests::setRest(
             [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(35, 1)
-                ]
+                Rest::createReusable(35, 1, TilePlannerConstants::RESTS_LEFT),
+
             ]
         );
 
