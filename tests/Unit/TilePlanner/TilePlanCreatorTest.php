@@ -7,7 +7,7 @@ namespace TilePlannerTests\Unit\TilePlanner;
 use TilePlanner\Form\TilePlannerType;
 use TilePlanner\TilePlanner\Creator\RowCreatorInterface;
 use TilePlanner\TilePlanner\Models\LayingOptions;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -26,13 +26,7 @@ final class TilePlanCreatorTest extends TestCase
                 ->addTile(Tile::create(25, 100, 10))
         );
 
-        $rests = new Rests();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [],
-                TilePlannerConstants::RESTS_RIGHT => [],
-            ]
-        );
+        $rests = new RestBag();
 
         $creator = new TilePlanCreator($rowCreator, $rests);
 

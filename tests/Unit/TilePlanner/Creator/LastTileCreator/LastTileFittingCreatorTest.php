@@ -6,10 +6,9 @@ namespace TilePlannerTests\Unit\TilePlanner\Creator\LastTileCreator;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
-use Spryker\Zed\Oms\Business\OrderStateMachine\PersistenceManager;
 use TilePlanner\TilePlanner\Creator\LastTileCreator\LastTileFittingCreator;
 use TilePlanner\TilePlanner\Models\LayingOptions;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -29,7 +28,7 @@ final class LastTileFittingCreatorTest extends TestCase
         );
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $this->clearRests();
 
@@ -38,12 +37,12 @@ final class LastTileFittingCreatorTest extends TestCase
         $actualTile = $creator->create($tileInput, $plan, $rests, $usedRowLength);
 
         self::assertEquals(25, $actualTile->getLength());
-        self::assertCount(1, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        self::assertCount(1, $rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 
     private function clearRests(): void
     {
-        $restProperty = new ReflectionProperty(Rests::class, 'rest');
+        $restProperty = new ReflectionProperty(RestBag::class, 'rests');
         $restProperty->setAccessible(true);
         $restProperty->setValue([]);
     }

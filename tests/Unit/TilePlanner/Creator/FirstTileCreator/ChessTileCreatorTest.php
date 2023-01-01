@@ -10,7 +10,7 @@ use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -41,7 +41,7 @@ final class ChessTileCreatorTest extends TestCase
         $creator = new ChessTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -63,7 +63,7 @@ final class ChessTileCreatorTest extends TestCase
         $creator = new ChessTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 

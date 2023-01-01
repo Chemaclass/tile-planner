@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TilePlanner\TilePlanner\Creator\LastTileCreator;
 
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class LastTileFittingCreator implements LastTileCreatorInterface
 {
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests, float $usedRowLength): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests, float $usedRowLength): ?Tile
     {
         $restOfRow = $tileInput->getRoomWidth() - $usedRowLength;
         $restOfTile = $tileInput->getTileLength() - $restOfRow;

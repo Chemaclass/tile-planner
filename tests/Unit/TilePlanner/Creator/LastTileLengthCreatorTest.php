@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use PHPUnit\Framework\TestCase;
 
@@ -35,7 +35,7 @@ final class LastTileLengthCreatorTest extends TestCase
         $creator = new LastTileLengthCreator([]);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 100);
 
@@ -56,7 +56,7 @@ final class LastTileLengthCreatorTest extends TestCase
         );
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests, 100);
 

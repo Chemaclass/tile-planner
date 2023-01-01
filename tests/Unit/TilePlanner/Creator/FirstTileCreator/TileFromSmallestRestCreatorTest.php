@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -49,14 +49,10 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         );
 
         $plan = new TilePlan();
-        $rests = new Rests();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(70, 3),
-                ]
-            ]
-        );
+        $rests = new RestBag();
+        $rests::setRest([
+            Rest::createReusable(70, 3, TilePlannerConstants::RESTS_LEFT),
+        ]);
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertNull($actualTile);
@@ -68,7 +64,7 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         $tileValidator->method('isValid')->willReturn(true);
 
         $smallestRestFinder = $this->createStub(SmallestRestFinderInterface::class);
-        $smallestRestFinder->method('findSmallestRestWithMinLength')->willReturn(Rest::create(50, 5));
+        $smallestRestFinder->method('findSmallestRestWithMinLength')->willReturn(Rest::createReusable(50, 5, TilePlannerConstants::RESTS_LEFT));
 
         $creator = new TileFromSmallestRestCreator(
             $tileValidator,
@@ -76,7 +72,7 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         );
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -89,7 +85,7 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         $tileValidator->method('isValid')->willReturn(true);
 
         $smallestRestFinder = $this->createStub(SmallestRestFinderInterface::class);
-        $smallestRestFinder->method('findSmallestRestWithMinLength')->willReturn(Rest::create(50, 5));
+        $smallestRestFinder->method('findSmallestRestWithMinLength')->willReturn(Rest::createReusable(50, 5, TilePlannerConstants::RESTS_LEFT));
 
         $creator = new TileFromSmallestRestCreator(
             $tileValidator,
@@ -99,27 +95,23 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
 
-        $rests = new Rests();
-        $rests::setRest(
-            [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(80, 1),
-                    Rest::create(70, 3),
-                    Rest::create(50, 5),
-                ]
-            ]
-        );
+        $rests = new RestBag();
+        $rests::setRest([
+            Rest::createReusable(80, 1, TilePlannerConstants::RESTS_LEFT),
+            Rest::createReusable(70, 3, TilePlannerConstants::RESTS_LEFT),
+            Rest::createReusable(50, 5, TilePlannerConstants::RESTS_LEFT),
+        ]);
 
         $expectedRest = [
-            Rest::create(80, 1),
-            Rest::create(70, 3),
+            Rest::createReusable(80, 1, TilePlannerConstants::RESTS_LEFT),
+            Rest::createReusable(70, 3, TilePlannerConstants::RESTS_LEFT),
         ];
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertEquals(20, $actualTile->getLength());
         self::assertEquals(5, $actualTile->getNumber());
-        self::assertEquals($expectedRest, $rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        self::assertEquals($expectedRest, $rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 
     public function test_return_null_if_smallest_rest_was_found(): void
@@ -139,18 +131,16 @@ final class TileFromSmallestRestCreatorTest extends TestCase
         );
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
         $rests::setRest(
             [
-                TilePlannerConstants::RESTS_LEFT => [
-                    Rest::create(30, 1),
-                ]
+                Rest::createReusable(30, 1, TilePlannerConstants::RESTS_LEFT),
             ]
         );
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
         self::assertEquals(30, $actualTile->getLength());
-        self::assertEmpty($rests->getRests(TilePlannerConstants::RESTS_LEFT));
+        self::assertEmpty($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -21,7 +21,7 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
         $tileRanges = $this->rangeCreator->calculateRanges($tileInput);
         $minLengthOfFirstRange = $tileRanges->getMinOfFirstRange();
@@ -35,7 +35,7 @@ final class MinimumTileCreator implements FirstTileCreatorInterface
 
             $rest = $tileInput->getTileLength() - $tileRanges->getMinOfFirstRange();
 
-            $rests->addRest(
+            $restBag->addRest(
                 $rest,
                 $tileInput->getMinTileLength(),
                 TilePlannerConstants::RESTS_RIGHT,

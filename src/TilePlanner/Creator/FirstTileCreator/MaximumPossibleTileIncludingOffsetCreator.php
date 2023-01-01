@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TileCounter;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -21,7 +21,7 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
         $tileMinLength = $tileInput->getMinTileLength();
         $tileLength = $tileInput->getTileLength();
@@ -44,7 +44,7 @@ final class MaximumPossibleTileIncludingOffsetCreator implements FirstTileCreato
 
             $restOfTile = $tileLength - $maxLengthOfFirstRangeWithOffset;
 
-            $rests->addRest(
+            $restBag->addRest(
                 $restOfTile,
                 $tileMinLength,
                 TilePlannerConstants::RESTS_RIGHT,

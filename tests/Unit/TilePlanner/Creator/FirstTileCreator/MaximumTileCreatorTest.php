@@ -10,7 +10,7 @@ use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
@@ -43,7 +43,7 @@ final class MaximumTileCreatorTest extends TestCase
         $creator = new MaximumTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -63,7 +63,7 @@ final class MaximumTileCreatorTest extends TestCase
         $creator = new MaximumTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -84,7 +84,7 @@ final class MaximumTileCreatorTest extends TestCase
         $creator = new MaximumTileCreator($tileValidator, $rangeCreator);
 
         $plan = new TilePlan();
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 

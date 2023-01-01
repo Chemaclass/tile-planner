@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Creator\Helper\SmallestRestFinderInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -20,9 +20,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
-        $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $rests);
+        $tileWidthIncludingOffset = $this->calculateTileWithOffset($plan, $tileInput, $restBag);
 
         if (null === $tileWidthIncludingOffset) {
             return null;
@@ -40,9 +40,9 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
             return null;
         }
 
-        $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
+        $restBag->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_LEFT);
         $trash = $smallestRest->getLength() - $tileWidthIncludingOffset;
-        $rests->addThrash($trash);
+        $restBag->addNonReusableRest($trash);
 
         return Tile::create(
             $tileInput->getTileWidth(),
@@ -54,7 +54,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
     private function calculateTileWithOffset(
         TilePlan $plan,
         TilePlanInput $tileInput,
-        Rests $rests
+        RestBag $rests
     ): ?float {
         $lengthTileLastRow = $plan->getLastRowLength();
         $tileWidthIncludingOffset = $lengthTileLastRow - $tileInput->getLayingOptions()->getMinOffset();
@@ -65,7 +65,7 @@ final class TileFromSmallestRestCreator implements FirstTileCreatorInterface
 
         $remainingRows = $tileInput->getTotalRows() - $plan->getRowsCount();
 
-        if (\count($rests->getRests(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
+        if (\count($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT)) < $remainingRows) {
             return null;
         }
 

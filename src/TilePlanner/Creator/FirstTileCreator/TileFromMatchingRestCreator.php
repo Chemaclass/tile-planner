@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\FirstTileCreator;
 
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -19,9 +19,11 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
     ) {
     }
 
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $restBag): ?Tile
     {
-        if (!$rests->hasRest(TilePlannerConstants::RESTS_LEFT)) {
+        $rests = $restBag->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT);
+
+        if (empty($rests)) {
             return null;
         }
 
@@ -32,7 +34,7 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
         );
 
         if (null !== $matchingRest) {
-            $rests->removeRest($matchingRest->getLength(), TilePlannerConstants::RESTS_LEFT);
+            $restBag->removeRest($matchingRest->getLength(), TilePlannerConstants::RESTS_LEFT);
 
             return Tile::create(
                 $tileInput->getTileWidth(),
@@ -45,11 +47,11 @@ final class TileFromMatchingRestCreator implements FirstTileCreatorInterface
     }
 
     private function findMatchingRest(
-        Rests $rests,
+        array $rests,
         TilePlan $plan,
         TilePlanInput $tileInput
     ): ?Rest {
-        foreach ($rests->getRests(TilePlannerConstants::RESTS_LEFT) as $rest) {
+        foreach ($rests as $rest) {
             $restLength = $rest->getLength();
 
             if ($restLength === $plan->getRowBeforeLastLength()) {

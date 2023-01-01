@@ -25,7 +25,7 @@ use TilePlanner\TilePlanner\Creator\LastTileLengthCreator;
 use TilePlanner\TilePlanner\Creator\RowCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreator;
 use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Validator\Models\MinLengthValidator;
 use TilePlanner\TilePlanner\Validator\Models\OffsetValidator;
 use TilePlanner\TilePlanner\Validator\Models\RangeValidator;
@@ -55,9 +55,9 @@ final class TilePlannerFactory extends AbstractFactory
         return new RowCreator($firstTileCalculator, $lastTileCalculator);
     }
 
-    private function createRest(): Rests
+    private function createRest(): RestBag
     {
-        return new Rests();
+        return new RestBag();
     }
 
     private function createTileLengthRangeCalculator(): TileLengthRangeCreatorInterface

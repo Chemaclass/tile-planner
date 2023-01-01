@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TilePlanner\TilePlanner\Creator\LastTileCreator;
 
 use TilePlanner\TilePlanner\Models\Rest;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Tile;
 use TilePlanner\TilePlanner\Models\TilePlan;
 use TilePlanner\TilePlanner\Models\TilePlanInput;
@@ -13,7 +13,7 @@ use TilePlanner\TilePlanner\TilePlannerConstants;
 
 final class LastTileFromRestCreator implements LastTileCreatorInterface
 {
-    public function create(TilePlanInput $tileInput, TilePlan $plan, Rests $rests, float $usedRowLength): ?Tile
+    public function create(TilePlanInput $tileInput, TilePlan $plan, RestBag $rests, float $usedRowLength): ?Tile
     {
         $restOfRow = $tileInput->getRoomWidth() - $usedRowLength;
         $foundRest = $this->findTileInRests($restOfRow, $rests);
@@ -29,13 +29,19 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
         return null;
     }
 
-    private function findTileInRests(float $length, Rests $rests): ?Rest
+    private function findTileInRests(float $length, RestBag $restBag): ?Rest
     {
-        if ($rests->hasRest(TilePlannerConstants::RESTS_RIGHT)) {
+        $rests = $restBag->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT);
+
+        if (!empty($rests)) {
             $possibleRests = [];
-            foreach ($rests->getRests(TilePlannerConstants::RESTS_RIGHT) as $rest) {
+            foreach ($rests as $rest) {
+                if (!$rest->isReusable()) {
+                    continue;
+                }
+
                 if ($rest->getLength() === $length) {
-                    $rests->removeRest($rest->getLength(), TilePlannerConstants::RESTS_RIGHT);
+                    $restBag->removeRest($rest->getLength(), TilePlannerConstants::RESTS_RIGHT);
 
                     return $rest;
                 }
@@ -47,10 +53,13 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
 
             if (!empty($possibleRests)) {
                 $smallestRest = $this->getRestWithSmallestLength($possibleRests);
-                $rests->removeRest($smallestRest->getLength(), TilePlannerConstants::RESTS_RIGHT);
+                $restBag->removeRest(
+                    $smallestRest->getLength(),
+                    TilePlannerConstants::RESTS_RIGHT
+                );
 
                 $trash = $smallestRest->getLength() - $length;
-                $rests->addThrash($trash);
+                $restBag->addNonReusableRest($trash);
 
                 return $smallestRest->setLength($length);
             }
@@ -64,7 +73,7 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
      */
     private function getRestWithSmallestLength(array $possibleRests): Rest
     {
-        if (1 === \count($possibleRests)) {
+        if (1 === count($possibleRests)) {
             return array_pop($possibleRests);
         }
 

@@ -10,7 +10,7 @@ use TilePlanner\TilePlanner\Creator\TileLengthRangeCreatorInterface;
 use TilePlanner\TilePlanner\Models\LayingOptions;
 use TilePlanner\TilePlanner\Models\LengthRange;
 use TilePlanner\TilePlanner\Models\LengthRangeBag;
-use TilePlanner\TilePlanner\Models\Rests;
+use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\Models\Room;
 use TilePlanner\TilePlanner\Models\Row;
 use TilePlanner\TilePlanner\Models\Tile;
@@ -46,7 +46,7 @@ final class MinimumTileCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
@@ -67,7 +67,7 @@ final class MinimumTileCreatorTest extends TestCase
 
         $plan = new TilePlan();
         $plan->addRow((new Row())->addTile(Tile::create(20, 30)));
-        $rests = new Rests();
+        $rests = new RestBag();
 
         $actualTile = $creator->create($this->tileInput, $plan, $rests);
 
