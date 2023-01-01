@@ -6,10 +6,11 @@ namespace TilePlannerTests\Unit\TilePlanner\Models;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use TilePlanner\TilePlanner\Models\Rest;
 use TilePlanner\TilePlanner\Models\RestBag;
 use TilePlanner\TilePlanner\TilePlannerConstants;
 
-final class RestsTest extends TestCase
+final class RestBagTest extends TestCase
 {
     public function test_removing_one_rest_should_not_remove_all(): void
     {
@@ -51,7 +52,10 @@ final class RestsTest extends TestCase
         $rests = new RestBag();
         $rests->addRest(20, 30, TilePlannerConstants::RESTS_LEFT, 1);
 
+        $rest = Rest::createNonReusable(20, 1, TilePlannerConstants::RESTS_LEFT);
+
         $this->assertEmpty($rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT));
+        $this->assertEquals([$rest], $rests->getNonReusableRests());
     }
 
     private function resetRests(): void

@@ -42,7 +42,7 @@ final class TilePlanCreator
         $plan->setTotalPrice($plan->getTotalAreaInSquareMeter() * $tileInput->getCostsPerSquare());
         $plan->setRoomWidth($tileInput->getRoomWidthWithGaps());
         $plan->setRoomDepth($tileInput->getRoomDepthWithGaps());
-        //$plan->setTrash($this->mergeTiles($this->rests->())); // TODO
+        $plan->setTrash($this->rests->getNonReusableRests());
         $plan->setRests(
             array_merge(
                 $this->rests->getReusableRestsForSide(TilePlannerConstants::RESTS_LEFT),
@@ -52,21 +52,6 @@ final class TilePlanCreator
         $plan->setTotalRest($this->rests->totalLengthOfAllRests());
 
         return $plan;
-    }
-
-    private function mergeTiles(array $tiles): array
-    {
-        $mergedTrash = [];
-
-        foreach ($tiles as $trash) {
-            if (!isset($mergedTrash[$trash])) {
-                $mergedTrash[$trash] = 0;
-            }
-
-            ++$mergedTrash[$trash];
-        }
-
-        return $mergedTrash;
     }
 
     private function retrieveHighestTileNumberFromRow(Row $row): int

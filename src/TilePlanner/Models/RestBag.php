@@ -68,4 +68,16 @@ final class RestBag
             return $rest->getLength();
         }, self::$rests));
     }
+
+    /**
+     * @return array<Rest>
+     */
+    public function getNonReusableRests(): array
+    {
+        if (empty(self::$rests)) {
+            return [];
+        }
+
+        return array_filter(self::$rests, static fn(Rest $rest) => !$rest->isReusable());
+    }
 }
