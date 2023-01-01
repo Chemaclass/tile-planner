@@ -36,7 +36,6 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
         if (!empty($rests)) {
             $possibleRests = [];
             foreach ($rests as $rest) {
-
                 if (!$rest->isReusable()) {
                     continue;
                 }

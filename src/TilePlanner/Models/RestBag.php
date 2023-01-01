@@ -27,8 +27,7 @@ final class RestBag
 
         return array_filter(self::$rests, static fn(Rest $rest) =>
             $rest->getSide() === $side
-            && $rest->isReusable()
-        );
+            && $rest->isReusable());
     }
 
     public function addRest(float $length, float $tileMinLength, string $side, int $number): void
