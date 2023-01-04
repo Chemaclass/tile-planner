@@ -33,39 +33,41 @@ final class LastTileFromRestCreator implements LastTileCreatorInterface
     {
         $rests = $restBag->getReusableRestsForSide(TilePlannerConstants::RESTS_RIGHT);
 
-        if (!empty($rests)) {
-            $possibleRests = [];
-            foreach ($rests as $rest) {
-                if (!$rest->isReusable()) {
-                    continue;
-                }
+        if (empty($rests)) {
+            return null;
+        }
 
-                if ($rest->getLength() === $length) {
-                    $restBag->removeRest($rest->getLength(), TilePlannerConstants::RESTS_RIGHT);
-
-                    return $rest;
-                }
-
-                if ($rest->getLength() > $length) {
-                    $possibleRests[] = $rest;
-                }
+        $possibleRests = [];
+        foreach ($rests as $rest) {
+            if (!$rest->isReusable()) {
+                continue;
             }
 
-            if (!empty($possibleRests)) {
-                $smallestRest = $this->getRestWithSmallestLength($possibleRests);
-                $restBag->removeRest(
-                    $smallestRest->getLength(),
-                    TilePlannerConstants::RESTS_RIGHT
-                );
+            if ($rest->getLength() === $length) {
+                $restBag->removeRest($rest->getLength(), TilePlannerConstants::RESTS_RIGHT);
 
-                $trash = $smallestRest->getLength() - $length;
-                $restBag->addNonReusableRest($trash);
+                return $rest;
+            }
 
-                return $smallestRest->setLength($length);
+            if ($rest->getLength() > $length) {
+                $possibleRests[] = $rest;
             }
         }
 
-        return null;
+        if (empty($possibleRests)) {
+            return null;
+        }
+
+        $smallestRest = $this->getRestWithSmallestLength($possibleRests);
+        $restBag->removeRest(
+            $smallestRest->getLength(),
+            TilePlannerConstants::RESTS_RIGHT
+        );
+
+        $trash = $smallestRest->getLength() - $length;
+        $restBag->addNonReusableRest($trash);
+
+        return $smallestRest->setLength($length);
     }
 
     /**
